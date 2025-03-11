@@ -5,7 +5,6 @@
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #fff;
-    
 }
 header
 {
@@ -205,4 +204,3 @@ header ul li a:hover
         height: 40vh;
     }
 }
-
