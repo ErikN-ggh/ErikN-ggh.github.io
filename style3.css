@@ -117,6 +117,7 @@ header ul li a:hover
 }
 .sci
 {
+    margin-top: 20vh;
     position: absolute;
     display: flex;
     justify-content: center;
