@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #fff;
+    height: 120vh;
 }
 header
 {
@@ -117,7 +118,6 @@ header ul li a:hover
 }
 .sci
 {
-    margin-top: 120vh;
     position: absolute;
     display: flex;
     justify-content: center;
