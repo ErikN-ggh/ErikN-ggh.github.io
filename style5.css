@@ -195,7 +195,7 @@ header ul li a:hover
 }
 .mov_down
 {
-    margin-top: 1.2vh;
+    margin-top: 120%;
 }
 
 @media (max-width: 600px)
