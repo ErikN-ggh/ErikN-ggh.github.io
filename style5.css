@@ -116,9 +116,13 @@ header ul li a:hover
     color: #fff;
     letter-spacing: 2px;
 }
+.mov_down
+{
+    margin: 4em;
+}
 .sci
 {
-    position: relative;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
