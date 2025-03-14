@@ -193,10 +193,6 @@ header ul li a:hover
         height: auto;
     }
 }
-.mov_down
-{
-    margin-top: 120%;
-}
 
 @media (max-width: 600px)
 {
