@@ -116,19 +116,14 @@ header ul li a:hover
     color: #fff;
     letter-spacing: 2px;
 }
-.mov_down
-{
-    margin-top: 18em;
-    margin-left: 0;
-    margin-right: 0;
-}
+
 .sci
 {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    bottom: 20px;
+    bottom: 80px;
     right: 60px;
 }
 .sci h3
