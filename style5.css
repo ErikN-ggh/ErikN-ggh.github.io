@@ -123,7 +123,8 @@ header ul li a:hover
     display: flex;
     justify-content: center;
     align-items: center;
-    bottom: 80px;
+    top: 100px;
+    bottom: 20px;
     right: 60px;
 }
 .sci h3
