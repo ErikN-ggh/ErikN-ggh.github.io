@@ -172,6 +172,7 @@ header ul li a:hover
     height: 100%;
     object-fit: cover;
 }
+
 @media (max-width: 991px)
 {
     .banner
