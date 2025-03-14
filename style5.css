@@ -118,7 +118,9 @@ header ul li a:hover
 }
 .mov_down
 {
-    margin: 4em;
+    margin-top: 12em;
+    margin-left: 0;
+    margin-right: 0;
 }
 .sci
 {
