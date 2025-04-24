@@ -1,26 +1,35 @@
-*
-{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
 }
-.banner
-{
+
+body {
+    background-color: #fff;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Layout */
+.banner {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
 }
-.banner .box
-{
+
+.banner .box {
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 20px;
 }
-.banner .box:last-child
-{
+
+.banner .box:last-child {
     background: #ff0;
 }
-header
-{
+
+/* Header */
+header {
     position: absolute;
     top: 0;
     left: 0;
@@ -29,75 +38,73 @@ header
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 10;
 }
-.logo
-{
-    position: relative;
+
+.logo {
+    display: flex;
+    align-items: center;
     font-size: 1.4em;
     color: #111;
     font-weight: 700;
     text-decoration: none;
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    height: 10vh;
-    max-height: fit-content;
-}
-.logo p
-{
-    margin-left: 10pt;
-    position: relative;
-    align-content: center;
 }
 
-.logo img
-{
-    height: auto;
+.logo p {
+    margin-left: 10px;
+    color: #111;
+}
+
+.logo img {
+    height: 40px;
     width: auto;
 }
 
-
-header ul
-{
+header ul {
     display: flex;
+    gap: 20px;
 }
-header ul li
-{
+
+header ul li {
     list-style: none;
-    margin-left: 30px;
 }
-header ul li a
-{
+
+header ul li a {
     text-decoration: none;
     font-weight: 700;
     color: #bdbdbd;
     letter-spacing: 1px;
+    transition: color 0.3s ease;
 }
-header ul li a:hover
-{
+
+header ul li a:hover {
     color: #333;
 }
-.content
-{
+
+/* Content */
+.content {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    padding: 65px;
+    align-items: flex-start;
+    padding: 120px 65px 65px;
 }
-.content h2
-{
-    margin-top: 100px;
-    font-size: 4em;
+
+.content h2 {
+    font-size: 3.5em;
     color: #333;
+    margin-bottom: 20px;
 }
-.content p
-{
+
+.content p {
     font-size: 1.1em;
     color: #777;
-    line-height: 1.8em;
+    max-width: 700px;
 }
-.btn
-{
+
+/* Button */
+.btn {
     display: inline-block;
     font-size: 1.1em;
     margin-top: 20px;
@@ -109,59 +116,62 @@ header ul li a:hover
     letter-spacing: 1px;
     transition: 0.5s;
 }
-.btn:hover
-{
+
+.btn:hover {
     background: #333;
     color: #fff;
     letter-spacing: 2px;
 }
-.sci
-{
+
+/* Social Icons */
+.sci {
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
     bottom: 20px;
     right: 60px;
+    flex-wrap: wrap;
+    gap: 15px;
 }
-.sci h3
-{
+
+.sci h3 {
     font-weight: 500;
     color: #bdbdbd;
     letter-spacing: 1px;
 }
-.sci li
-{
+
+.sci li {
     list-style: none;
-    margin-left: 20px;
 }
-.sci li img
-{
+
+.sci li img {
     max-width: 35px;
 }
-.images
-{
+
+/* Images Grid */
+.images {
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
 }
-.images .imgBx
-{
-    position: relative;
+
+.images .imgBx {
     width: 50%;
     height: 50vh;
-    background: #0f0;
+    position: relative;
 }
-.images .imgBx:nth-child(2)
-{
+
+.images .imgBx:nth-child(2) {
     background: #00f;
 }
-.images .imgBx:nth-child(3)
-{
+
+.images .imgBx:nth-child(3) {
     width: 100%;
     background: #ff0;
 }
-.images .imgBx img
-{
+
+.images .imgBx img {
     position: absolute;
     top: 0;
     left: 0;
@@ -169,38 +179,38 @@ header ul li a:hover
     height: 100%;
     object-fit: cover;
 }
-@media (max-width: 991px)
-{
-    .banner
-    {
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .banner {
         grid-template-columns: 1fr;
     }
-    header
-    {
-        padding: 20px 40px;
+
+    header {
+        padding: 20px 30px;
     }
-    .content
-    {
-        padding: 40px;
+
+    .content {
+        padding: 120px 30px 40px;
     }
-    .banner .box.content
-    {
-        height: 70vh;
-    }
-    .banner .box.images
-    {
-        height: auto;
+
+    .content h2 {
+        font-size: 2.8em;
     }
 }
-@media (max-width: 600px)
-{
-    .content h2
-    {
-        font-size: 3em;
+
+@media (max-width: 600px) {
+    .content h2 {
+        font-size: 2.2em;
     }
-    .images .imgBx
-    {
+
+    .images .imgBx {
         width: 100%;
         height: 40vh;
+    }
+
+    .sci {
+        right: 30px;
+        bottom: 15px;
     }
 }
