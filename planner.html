@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einnahmen-Ausgaben-Planer</title>
+    <style>
+    body
+    {
+        font-family: sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        background: #fff;
+    }
+    h1
+    {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    form
+    {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    input, select, button
+    {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+    button
+    {
+        background-color: #333;
+        color: #fff;
+        cursor: pointer;
+    }
+    .entry-list
+    {
+        margin-top: 1rem;
+    }
+    .entry
+    {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    .entry-content
+    {
+        flex-grow: 1;
+    }
+    .income
+    {
+        color: green;
+    }
+    .expense
+    {
+        color: red;
+    }
+    .meta-info
+    {
+        color: gray;
+        font-size: 0.9em;
+        display: block;
+    }
+    .saldo
+    {
+        font-weight: bold;
+        margin-top: 1rem;
+        font-size: 1.2rem;
+    }
+    .export-button
+    {
+        margin-top: 1rem;
+        display: inline-block;
+    }
+    .delete-button
+    {
+        background-color: transparent;
+        border: none;
+        color: red;
+        font-weight: bold;
+        cursor: pointer;
+        margin-right: 1rem;
+    }
+    .small-input
+    {
+        flex: 1 1 45%;
+    }
+    </style>
+</head>
+<body>
+    <h1>Einnahmen-Ausgaben-Planer</h1>
+    <form id="entry-form">
+        <input type="text" id="description" placeholder="Beschreibung" required>
+        <input type="number" id="amount" placeholder="Betrag" required>
+        <select id="category">
+            <option value="expense">Ausgabe</option>
+            <option value="income">Einnahme</option>
+        </select>
+        <input type="date" id="date" class="small-input" placeholder="Datum (optional)">
+        <input type="text" id="receipt" class="small-input" placeholder="Belegnummer (optional)">
+        <button type="submit">Hinzufügen</button>
+    </form>
+
+    <div class="entry-list" id="entry-list"></div>
+    <div class="saldo" id="saldo">Gesamtsaldo: 0 €</div>
+    <button class="export-button" onclick="exportCSV()">📁 CSV exportieren</button>
+
+    <script>
+        const form = document.getElementById('entry-form');
+        const list = document.getElementById('entry-list');
+        const saldoDisplay = document.getElementById('saldo');
+
+        let entries = JSON.parse(localStorage.getItem('entries')) || [];
+
+        function formatDate(isoDate)
+        {
+            if(!isoDate)
+            {
+                return '';
+            }
+            const [year, month, day] = isoDate.split('-');
+            return `${day}.${month}.${year}`;
+        }
+
+    function updateUI()
+    {
+        list.innerHTML = '';
+        let saldo = 0;
+        entries.forEach((entry, index) => {
+            const div = document.createElement('div');
+            div.className = `entry`;
+
+            const content = document.createElement('div');
+            content.className = `entry-content ${entry.category}`;
+            content.innerHTML = `${entry.description}: ${entry.amount} €`;
+            if(entry.date)
+            {
+                content.innerHTML += `<span class="meta-info">am ${formatDate(entry.date)}</span>`;
+            }
+            if(entry.receipt)
+            {
+                content.innerHTML += `<span class="meta-info">Beleg: ${entry.receipt}</span>`;
+            }
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-button';
+            deleteBtn.textContent = '✕';
+            deleteBtn.onclick = () => {
+            entries.splice(index, 1);
+            updateUI();
+            };
+
+            div.appendChild(deleteBtn);
+            div.appendChild(content);
+            list.appendChild(div);
+
+            saldo += entry.category === 'income' ? entry.amount : -entry.amount;
+        });
+        saldoDisplay.textContent = `Gesamtsaldo: ${saldo.toFixed(2)} €`;
+        localStorage.setItem('entries', JSON.stringify(entries));
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const description = document.getElementById('description').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const category = document.getElementById('category').value;
+        const date = document.getElementById('date').value;
+        const receipt = document.getElementById('receipt').value;
+
+        if(!description || isNaN(amount))
+        {
+            return;
+        }
+
+        entries.push({ description, amount, category, date, receipt });
+        form.reset();
+        updateUI();
+    });
+
+    function exportCSV()
+    {
+        let csvContent = "Beschreibung,Betrag,Kategorie,Datum,Belegnummer\n";
+        entries.forEach(e => {
+            csvContent += `${e.description},${e.amount},${e.category},${e.date || ''},${e.receipt || ''}\n`;
+        });
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'einnahmen-ausgaben.csv';
+        link.click();
+    }
+
+    updateUI();
+    </script>
+</body>
+</html>
