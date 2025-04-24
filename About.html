@@ -1,45 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About</title>
-    <link rel="stylesheet" type="text/css" href="style5.css">
+    <link rel="stylesheet" href="style5.css">
+    <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body
+        {
+            background-color: #fff;
+            height: 100%;
+        }
+
+        header
+        {
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo
+        {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .logo img
+        {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo p
+        {
+            margin-left: 10px;
+            font-size: 1.2em;
+        }
+
+        header ul
+        {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        header ul li a
+        {
+            text-decoration: none;
+            font-weight: 700;
+            color: #bdbdbd;
+        }
+
+        header ul li a:hover
+        {
+            color: #333;
+        }
+
+        .contentBox
+        {
+            max-width: 960px;
+            margin: 100px auto 60px auto;
+            padding: 20px;
+        }
+
+        .contentBox h2
+        {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .paragraph, .list
+        {
+            font-size: 1.1em;
+            color: #777;
+            line-height: 1.8em;
+        }
+
+        .list
+        {
+            margin: 20px 0;
+        }
+
+        .sci
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .sci h3
+        {
+            font-weight: 500;
+            color: #bdbdbd;
+            margin-right: 10px;
+        }
+
+        .sci li
+        {
+            list-style: none;
+        }
+
+        .sci li img
+        {
+            max-width: 30px;
+        }
+
+        @media (max-width: 768px)
+        {
+            header
+            {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo p
+            {
+                font-size: 1em;
+            }
+
+            .contentBox h2
+            {
+                font-size: 2em;
+            }
+
+            header ul
+            {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="box content">
         <header>
-            <a href="#" class="logo"><img src="Logo.png"> <p>Nürnberger Digital Services</p></a>
+            <a href="#" class="logo">
+                <img src="Logo.png" alt="Logo">
+                <p>Nürnberger Digital Services</p>
+            </a>
             <ul>
                 <li><a href="contact.html">Kontakt</a></li>
                 <li><a href="index2.html">Zurück</a></li>
                 <li><a href="planner.html">Planer</a></li>
             </ul>
-          </header>
-          <div class="contentBox">
+        </header>
+
+        <div class="contentBox">
             <h2>Über Uns</h2>
-            <p class="paragraph">Nürnberger Digital Services ist ein Unternehmen, das digitale Dienstleistungen
+            <p class="paragraph">
+                Nürnberger Digital Services ist ein Unternehmen, das digitale Dienstleistungen
                 für private Kunden und Unternehmen in Deutschland anbietet.
-                Unser Angebot:
-                <ul class="list">
-                    <li>IT Beratung, Managed IT Services (IT-Support)</li>
-                    <li>Automatisierung von Datenprozessen & Low-Code/No-Code-Entwicklung</li>
-                    <li>SEO & Web-Optimierung</li>
-                    <li>Individualisierte und angepasste Automatisierungs- und Datenverarbeitungsprozesse</li>
-                </ul>
-              Versuchen sie doch auch unseren neuen Einnahmen-Ausgaben Planer: <a href="planner.html">Hier klicken</a>
             </p>
-          </div>
-          <ul class="sci">
-            <h3>Folgen sie uns:</h3>
-            <li><a href="#"><img src="Twitter.png"></a></li>
-            <li><a href="https://www.instagram.com/nuernberger_digital_services?igsh=MTBzdjl0Z3NwdmNxNQ=="><img src="Instagram.png"></a></li>
-          </ul>
+            <ul class="list">
+                <li>IT Beratung, Managed IT Services (IT-Support)</li>
+                <li>Automatisierung von Datenprozessen & Low-Code/No-Code-Entwicklung</li>
+                <li>SEO & Web-Optimierung</li>
+                <li>Individualisierte und angepasste Automatisierungs- und Datenverarbeitungsprozesse</li>
+            </ul>
+            <p class="paragraph">
+                Versuchen Sie doch auch unseren neuen Einnahmen-Ausgaben Planer: <a href="planner.html">Hier klicken</a>
+            </p>
         </div>
+
+        <ul class="sci">
+            <h3>Folgen Sie uns:</h3>
+            <li><a href="#"><img src="Twitter.png" alt="Twitter"></a></li>
+            <li><a href="https://www.instagram.com/nuernberger_digital_services?igsh=MTBzdjl0Z3NwdmNxNQ=="><img src="Instagram.png" alt="Instagram"></a></li>
+        </ul>
+    </div>
 </body>
-    <script>
-        let x = 3;
-        console.log(x*x);
-        console.log("update");
-    </script>
 </html>
