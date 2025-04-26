@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Professioneller Buchungsplaner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        input:invalid {
+            border: 2px solid red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .gray {
+            color: gray;
+        }
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .settings {
+            margin-top: 30px;
+        }
+        .settings label {
+            display: block;
+            margin-top: 10px;
+        }
+        .koststellen-fields {
+            display: none;
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Professioneller Buchungsplaner</h2>
+    <form id="entryForm">
+        <input type="number" step="0.01" placeholder="Betrag" id="betrag" required>
+        <input type="text" maxlength="1" placeholder="Soll(S) / Haben(H)" id="richtung" required>
+        <input type="text" placeholder="Gegenkonto" id="gegenkonto" required>
+        <input type="text" placeholder="Belegnummer" id="beleg" required>
+        <input type="date" id="datum" required>
+        <input type="text" placeholder="Konto" id="konto" required>
+        <input type="text" placeholder="Buchungstext" id="butxt" required>
+        <input type="text" placeholder="Währung" id="waehrung" value="€" required>
+        <div class="koststellen-fields" id="koststellenContainer">
+            <input type="text" placeholder="Kost1" id="kost1">
+            <input type="text" placeholder="Kost2" id="kost2">
+        </div>
+        <button type="submit">Eintrag hinzufügen</button>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Betrag</th>
+            <th>S/H</th>
+            <th>Gegenkonto</th>
+            <th>Belegnummer</th>
+            <th>Datum</th>
+            <th>Konto</th>
+            <th>Währung</th>
+            <th>Buchungstext</th>
+            <th>Aktion</th>
+        </tr>
+        </thead>
+        <tbody id="entries"></tbody>
+    </table>
+
+    <div class="button-row">
+        <button onclick="downloadCSV()">CSV Exportieren</button>
+        <div>
+            CSV Importieren:
+            <input type="file" accept=".csv" onchange="importCSV(event)">
+        </div>
+    </div>
+
+    <div class="settings">
+        <label>
+            Kontenlänge:
+            <input type="number" id="kontenlaenge" value="4">
+        </label>
+        <label>
+            Kontenrahmen:
+            <select id="kontenrahmen">
+                <option value="SKR03">SKR03</option>
+                <option value="SKR04">SKR04</option>
+            </select>
+        </label>
+        <label>
+            Kostenstellenrechnung aktivieren:
+            <input type="checkbox" id="toggleKostenstelle">
+        </label>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('entryForm');
+    const tbody = document.getElementById('entries');
+    const kostenstellenContainer = document.getElementById('koststellenContainer');
+    const toggleKostenstelle = document.getElementById('toggleKostenstelle');
+
+    toggleKostenstelle.addEventListener('change', () => {
+        kostenstellenContainer.style.display = toggleKostenstelle.checked ? 'grid' : 'none';
+    });
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const beleg = document.getElementById('beleg').value;
+        const datum = document.getElementById('datum').value;
+        const konto = document.getElementById('konto').value;
+        const gegenkonto = document.getElementById('gegenkonto').value;
+        const betrag = parseFloat(document.getElementById('betrag').value);
+        const waehrung = document.getElementById('waehrung').value;
+        const butxt = document.getElementById('butxt').value;
+        const richtung = document.getElementById('richtung').value.toUpperCase();
+        const kost1 = document.getElementById('kost1')?.value || '';
+        const kost2 = document.getElementById('kost2')?.value || '';
+
+        if (!["S", "H"].includes(richtung) || isNaN(betrag)) return;
+
+        const row = document.createElement('tr');
+        row.dataset.kost1 = kost1;
+        row.dataset.kost2 = kost2;
+        row.innerHTML = `
+            <td>${betrag.toFixed(2)}</td>
+            <td>${richtung}</td>
+            <td>${gegenkonto}</td>
+            <td>${beleg}</td>
+            <td>${datum.replace(/-/g, '.')}</td>
+            <td>${konto}</td>
+            <td>${waehrung}</td>
+            <td>${butxt}</td>
+            <td><button onclick="this.closest('tr').remove()">✕</button></td>
+        `;
+        tbody.appendChild(row);
+        form.reset();
+        kostenstellenContainer.style.display = toggleKostenstelle.checked ? 'grid' : 'none';
+        document.getElementById('betrag').focus();
+    });
+
+    function downloadCSV() {
+        const kontenlaenge = document.getElementById('kontenlaenge').value;
+        const kontenrahmen = document.getElementById('kontenrahmen').value;
+
+        let csv = `Kontenlänge,Kontenrahmen\n${kontenlaenge},${kontenrahmen}\n`;
+        csv += 'Betrag,S/H,Gegenkonto,Belegnummer,Datum,Konto,Währung,Buchungstext,Kost1,Kost2\n';
+        [...tbody.rows].forEach(row => {
+            const cells = [...row.cells].slice(0, 8).map(cell => `"${cell.innerText}"`);
+            const kost1 = row.dataset.kost1 || '';
+            const kost2 = row.dataset.kost2 || '';
+            csv += [...cells, `"${kost1}"`, `"${kost2}"`].join(',') + '\n';
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'buchungsplaner.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const lines = e.target.result.split('\n').slice(3);
+            lines.forEach(line => {
+                const cells = line.split(',').map(c => c.replace(/^"|"$/g, ''));
+                if (cells.length < 10) return;
+                const row = document.createElement('tr');
+                row.dataset.kost1 = cells[8];
+                row.dataset.kost2 = cells[9];
+                row.innerHTML = cells.slice(0, 8).map(c => `<td>${c}</td>`).join('') +
+                    `<td><button onclick="this.closest('tr').remove()">✕</button></td>`;
+                tbody.appendChild(row);
+            });
+        };
+        reader.readAsText(file);
+    }
+
+    // Enter → nächstes Feld
+    const inputs = document.querySelectorAll('form input');
+    inputs.forEach((input, index) => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const next = inputs[index + 1];
+                if (next) next.focus();
+            }
+        });
+    });
+</script>
+</body>
+</html>
