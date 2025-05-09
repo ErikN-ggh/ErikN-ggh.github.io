@@ -180,12 +180,12 @@
         const kontenrahmen = document.getElementById('kontenrahmen').value;
 
         let csv = `Kontenlänge,Kontenrahmen\n${kontenlaenge},${kontenrahmen}\n`;
-        csv += 'Betrag,S/H,Gegenkonto,Belegnummer,Datum,Konto,Währung,Buchungstext,Kost1,Kost2\n';
+        csv += 'Betrag;S/H;Gegenkonto;Belegnummer;Datum;Konto;Währung;Buchungstext;Kost1;Kost2\n';
         [...tbody.rows].forEach(row => {
             const cells = [...row.cells].slice(0, 8).map(cell => `"${cell.innerText}"`);
             const kost1 = row.dataset.kost1 || '';
             const kost2 = row.dataset.kost2 || '';
-            csv += [...cells, `"${kost1}"`, `"${kost2}"`].join(',') + '\n';
+            csv += [...cells, `"${kost1}"`, `"${kost2}"`].join(';') + '\n';
         });
 
         const blob = new Blob([csv], { type: 'text/csv' });
