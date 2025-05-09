@@ -205,7 +205,7 @@
         reader.onload = function(e) {
             const lines = e.target.result.split('\n').slice(3);
             lines.forEach(line => {
-                const cells = line.split(',').map(c => c.replace(/^"|"$/g, ''));
+                const cells = line.split(';').map(c => c.replace(/^"|"$/g, ''));
                 if (cells.length < 10) return;
                 const row = document.createElement('tr');
                 row.dataset.kost1 = cells[8];
