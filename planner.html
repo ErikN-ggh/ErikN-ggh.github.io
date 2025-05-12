@@ -17,65 +17,6 @@
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
         background: #fff;
     }
-    header
-    {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 20px 60px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 150px;
-    }
-    .logo
-    {
-        position: relative;
-        font-size: 1.4em;
-        color: #111;
-        font-weight: 700;
-        text-decoration: none;
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-        height: 10vh;
-        max-height: fit-content;
-    }
-    .logo p
-    {
-        margin-left: 10pt;
-        position: relative;
-        align-content: center;
-    }
-    
-    .logo img
-    {
-        height: auto;
-        width: auto;
-    }
-    
-    
-    header ul
-    {
-        display: flex;
-    }
-    header ul li
-    {
-        list-style: none;
-        margin-left: 30px;
-    }
-    header ul li a
-    {
-        text-decoration: none;
-        font-weight: 700;
-        color: #bdbdbd;
-        letter-spacing: 1px;
-    }
-    header ul li a:hover
-    {
-        color: #333;
-    }
     h1
     {
         font-size: 1.5rem;
@@ -164,26 +105,18 @@
     </style>
 </head>
 <body>
-    <div class="box content">
-        <header>
-            <a href="#" class="logo"><img src="Logo.png"> <p>Nürnberger Digital Services</p></a>
-            <ul>
-               <li><a href="Apps.html">Zurück</a></li>
-            </ul>
-          </header>
-    </div>
-        <h1>Einnahmen-Ausgaben-Planer</h1>
-        <form id="entry-form">
-            <input type="text" id="description" placeholder="Beschreibung" required>
-            <input type="number" step="0.01" id="amount" placeholder="Betrag in €" required>
-            <select id="category">
-                <option value="expense">Ausgabe</option>
-                <option value="income">Einnahme</option>
-            </select>
-            <input type="date" id="date" class="small-input" placeholder="Datum (optional)">
-            <input type="text" id="receipt" class="small-input" placeholder="Belegnummer (optional)">
-            <button type="submit">Hinzufügen</button>
-        </form>
+    <h1>Einnahmen-Ausgaben-Planer</h1>
+    <form id="entry-form">
+        <input type="text" id="description" placeholder="Beschreibung" required>
+        <input type="number" step="0.01" id="amount" placeholder="Betrag in €" required>
+        <select id="category">
+            <option value="expense">Ausgabe</option>
+            <option value="income">Einnahme</option>
+        </select>
+        <input type="date" id="date" class="small-input" placeholder="Datum (optional)">
+        <input type="text" id="receipt" class="small-input" placeholder="Belegnummer (optional)">
+        <button type="submit">Hinzufügen</button>
+    </form>
     
         <div class="entry-list" id="entry-list"></div>
         <div class="saldo" id="saldo">Gesamtsaldo: 0 €</div>
@@ -277,5 +210,8 @@
 
     updateUI();
     </script>
+    <br>
+    <br>
+    <a href=Apps.htlm>Zurück</a>
 </body>
 </html>
