@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XRechnung Generator</title>
+  <style>
+    body
+    {
+        font-family: sans-serif;
+        margin: 20px;
+        padding: 0;
+        background: #f9f9f9;
+    }
+    h1
+    {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    form
+    {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .section
+    {
+        margin-bottom: 20px;
+    }
+    label
+    {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    input, select
+    {
+        width: 98%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .positions
+    {
+        margin-top: 20px;
+    }
+    .position
+    {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        background: #f1f1f1;
+    }
+    button
+    {
+        margin-top: 10px;
+        padding: 10px 15px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover
+    {
+        background: #0056b3;
+    }
+    #hinweis
+    {
+      padding: 1pt;
+      border-radius: 5px;
+      border: 1px solid #ff6f6f;
+    }
+    #hinweis p
+    {
+      text-align: center;
+      color: rgb(175, 175, 175);
+      padding: 1px;
+      font-size: 10pt;
+    }
+    #bold
+    {
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <h2>XRechnung Generator</h2>
+  <form id="xrechnungForm">
+    <select id="invoice_Type" required>
+        <option value="380" name="invoiceType">Rechnung (Standardrechnung)</option>
+        <option value="381" name="invoiceType">Gutschrift</option>
+        <option value="384" name="invoiceType">Korrekturrechnung</option>
+        <option value="326" name="invoiceType">Teilrechnung</option>
+        <option value="389" name="invoiceType">Eigenrechnung</option>
+      </select>
+    <label>Rechnungsnummer <input name="invoiceNumber" required></label>
+    <label>Rechnungsdatum <input type="date" name="invoiceDate" required></label>
+    <label>Lieferdatum <input type="date" name="deliveryDate" required></label>
+    <label>Leistungsempfänger (Name) <input name="buyerName" required></label>
+    <label>Leistungsempfänger Referenz (optional) <input name="buyerReference" value=""></label>
+    <label>Leistungsempfänger (Straße) <input name="buyerStreet" required></label>
+    <label>Leistungsempfänger (PLZ) <input name="buyerZip" required></label>
+    <label>Leistungsempfänger (Ort) <input name="buyerCity" required></label>
+    <label>Leistungsempfänger (Land) <input name="buyerCountry" value="DE" required></label>
+    <label>Leistungsempfänger (USt-IdNr.) <input name="buyerVat" required></label>
+    <label>Lieferant (Name) <input name="sellerName" required></label>
+    <label>Lieferant (Straße) <input name="sellerStreet" required></label>
+    <label>Lieferant (PLZ) <input name="sellerZip" required></label>
+    <label>Lieferant (Ort) <input name="sellerCity" required></label>
+    <label>Lieferant (Land) <input name="sellerCountry" value="DE" required></label>
+    <label>Lieferant (USt-IdNr.) <input name="sellerVat" required></label>
+    <label>Nachlässe (%) <input name="Allowance" id="Allowance_id" value="0"></label>
+    <label>Währung <input name="currency" required value="EUR"></label>
+    <label>Vorauszahlungen <input name="Prepaid" id="Prepaid_id" value="0"></label>
+    <label>Zahlungsbedingungen <input name="payCondition" value="keine"></label>
+    <div id="positionsContainer"></div>
+    <button type="button" onclick="addPosition()">Position hinzufügen</button>
+    <button type="submit">XRechnung erstellen</button>
+  </form>
+
+  <script>
+    let positionIndex = 0;
+    let total_Net = 0;
+    let totalVatAmount = 0;
+
+    function addPosition()
+    {
+      const container = document.getElementById('positionsContainer');
+
+      const positionHTML = `
+        <div class="position" id="p${positionIndex}">
+          <label>Name der Leistung <input type="text" name="itemName" id="item${positionIndex}" required></label>
+          <label>Beschreibung der Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description${positionIndex}"></label>
+          <label>Einheit (Optional)<input type="text" name="itemUnit" id="unit${positionIndex}"></label>
+          <label>Anzahl <input type="number" step="0.01" name="itemQuantity" id="quantity${positionIndex}" required></label>
+          <label>Netto-Betrag <input type="number" step="0.01" name="itemPrice" id="price${positionIndex}" required></label>
+          <select id="Taxtype${positionIndex}" required>
+            <option value="S19" id="vatRate${positionIndex}">Standardsteuersatz (19%)</option>
+            <option value="S7" id="vatRate${positionIndex}">ermäßigter Steuersatz (7%)</option>
+            <option value="E" id="vatRate${positionIndex}">Steuerbefreite Position </option>
+            <option value="Z0" id="vatRate${positionIndex}">Nullsteuersatz (0%)</option>
+            <option value="K" id="vatRate${positionIndex}">Steuerbefreite innergemeinschaftliche Lieferung</option>
+            <option value="AE" id="vatRate${positionIndex}">Vorsteuer</option>
+            <option value="G" id="vatRate${positionIndex}">Steuerbefreites Wirtschaftsgut</option>
+            </select>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', positionHTML);
+        positionIndex++;
+    }
+    document.getElementById('xrechnungForm').addEventListener('submit', function(e) {
+      if(positionIndex == 0)
+      {
+        window.alert("Sie müssen mindestens eine Rechnungsposition hinterlegen!");
+        return;
+      }
+      e.preventDefault();
+      let elem_item  = [];
+      let elem_quantity  = [];
+      let elem_price  = [];
+      let elem_vatu  = [];
+      let elem_vat  = [];
+      let catcode  = [];
+      let elem_unit = [];
+      let elem_description = [];
+      for(let i = 0; i < positionIndex; i++)
+      {
+        let idstr_item = "item" + i.toString();
+        let idstr_description = "description" + i.toString();
+        let idstr_Q = "quantity" + i.toString();
+        let idstr_price = "price" + i.toString();
+        let idstr_vat = "Taxtype" + i.toString();
+        let idstr_unit = "unit" + i.toString();
+        elem_item[i] = document.getElementById(idstr_item).value;
+        elem_description[i] = document.getElementById(idstr_description).value;
+        elem_quantity[i] = parseFloat(document.getElementById(idstr_Q).value);
+        elem_price[i] = parseFloat(document.getElementById(idstr_price).value);
+        elem_vatu[i] = document.getElementById(idstr_vat).value;
+        elem_unit[i] = parseFloat(document.getElementById(idstr_unit).value);
+      }
+
+      //get vat amount
+      for(let i = 0; i < positionIndex; i++)
+      {
+        console.log(elem_vatu[i]);
+        elem_vat[i] = 0;
+        let nstr = "";
+        let numstr = "";
+        let str = elem_vatu[i];
+        for(let j = 0; j < str.length; j++)
+        {
+            if(str[j] == "0" | str[j] == "1" | str[j] == "2" | str[j] == "3" | str[j] == "4" | str[j] == "5" | str[j] == "6" | str[j] == "7" | str[j] == "8" | str[j] == "9")
+            {
+                numstr = numstr + str[j];
+            }
+            else
+            {
+                nstr = nstr + str[j]
+            }
+        }
+        console.log(numstr);
+        console.log(nstr);
+        if(!isNaN(parseInt(numstr)))
+        {
+          elem_vat[i] = parseInt(numstr);
+        }
+        catcode[i] = nstr;
+        console.log(elem_vat[i])
+        console.log(catcode[i]);
+      }
+      const data = Object.fromEntries(new FormData(e.target));
+      for(let i = 0; i < positionIndex; i++)
+      {
+        total_Net = ((elem_quantity[i] * elem_price[i]) + total_Net);
+        totalVatAmount = ((((elem_quantity[i] * elem_price[i]) * elem_vat[i]) / 100) + totalVatAmount);
+      } 
+      const vatAmount = (data.itemPrice * data.itemQuantity * data.vatRate / 100).toFixed(2);
+      const totalAmount = total_Net;
+      let Allow_A = document.getElementById("Allowance_id").value;
+      let prepaid = document.getElementById("Prepaid_id").value;
+      const Allow_Amount = (totalAmount * Allow_A) / 100;
+      var e = document.getElementById("invoice_Type");
+      const invoiceType = e.value;
+      const xml1 = `<?xml version='1.0' encoding='UTF-8' ?>
+<rsm:CrossIndustryInvoice xmlns:a='urn:un:unece:uncefact:data:standard:QualifiedDataType:100' xmlns:rsm='urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100' xmlns:qdt='urn:un:unece:uncefact:data:standard:QualifiedDataType:10' xmlns:ram='urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:udt='urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100'>
+  <rsm:ExchangedDocumentContext>
+    <ram:GuidelineSpecifiedDocumentContextParameter>
+      <ram:ID>urn:cen.eu:en16931:2017</ram:ID>
+    </ram:GuidelineSpecifiedDocumentContextParameter>
+  </rsm:ExchangedDocumentContext>
+  <rsm:ExchangedDocument>
+  <ram:ID>${data.invoiceNumber}</ram:ID>
+  <ram:TypeCode>${invoiceType}</ram:TypeCode>
+  <ram:IssueDateTime>
+    <udt:DateTimeString format='102'>${data.invoiceDate.replace(/-/g, '')}</udt:DateTimeString>
+  </ram:IssueDateTime>
+  <ram:IncludedNote>
+    <ram:Content>Rechnung</ram:Content>
+  </ram:IncludedNote>
+  <ram:IncludedNote>
+    <ram:Content>XRechnung</ram:Content>
+  </ram:IncludedNote>
+</rsm:ExchangedDocument>
+<rsm:SupplyChainTradeTransaction>`
+
+let xml2 = ``
+for(let i = 0; i < positionIndex; i++)
+{
+  let n_total = (elem_quantity[i] * elem_price[i]);
+  
+  xml2 = xml2 + `
+  <ram:IncludedSupplyChainTradeLineItem>
+  <ram:AssociatedDocumentLineDocument>
+    <ram:LineID>${i + 1}</ram:LineID>
+  </ram:AssociatedDocumentLineDocument>
+  <ram:SpecifiedTradeProduct>
+    <ram:Name>${elem_item[i]}</ram:Name>
+    <ram:Description>${elem_description[i]}</ram:Description>
+  </ram:SpecifiedTradeProduct>
+  <ram:SpecifiedLineTradeAgreement>
+    <ram:GrossPriceProductTradePrice>
+      <ram:ChargeAmount>${(n_total + (n_total * elem_vat[i] / 100)).toFixed(2)}</ram:ChargeAmount>
+    </ram:GrossPriceProductTradePrice>
+    <ram:NetPriceProductTradePrice>
+      <ram:ChargeAmount>${elem_price[i].toFixed(2)}</ram:ChargeAmount>
+    </ram:NetPriceProductTradePrice>
+  </ram:SpecifiedLineTradeAgreement>
+  <ram:SpecifiedLineTradeDelivery>
+    <ram:BilledQuantity unitCode='C62'>${elem_quantity[i]}</ram:BilledQuantity>
+  </ram:SpecifiedLineTradeDelivery>
+  <ram:SpecifiedLineTradeSettlement>
+    <ram:ApplicableTradeTax>
+      <ram:TypeCode>VAT</ram:TypeCode>
+      <ram:CategoryCode>${catcode[i]}</ram:CategoryCode>
+      <ram:RateApplicablePercent>${elem_vat[i].toFixed(2)}</ram:RateApplicablePercent>
+    </ram:ApplicableTradeTax>
+    <ram:SpecifiedTradeSettlementLineMonetarySummation>
+      <ram:LineTotalAmount>${(elem_quantity[i] * elem_price[i]).toFixed(2)}</ram:LineTotalAmount>
+    </ram:SpecifiedTradeSettlementLineMonetarySummation>
+  </ram:SpecifiedLineTradeSettlement>
+</ram:IncludedSupplyChainTradeLineItem>`
+}
+
+  const xml3 = `
+
+  <ram:ApplicableHeaderTradeAgreement>
+  <ram:BuyerReference>${data.buyerReference}</ram:BuyerReference>
+  <ram:SellerTradeParty>
+    <ram:Name>${data.sellerName}</ram:Name>
+    <ram:PostalTradeAddress>
+      <ram:PostcodeCode>${data.sellerZip}</ram:PostcodeCode>
+      <ram:LineOne>${data.sellerStreet}</ram:LineOne>
+      <ram:CityName>${data.sellerCity}</ram:CityName>
+      <ram:CountryID>${data.sellerCountry}</ram:CountryID>
+    </ram:PostalTradeAddress>
+    <ram:SpecifiedTaxRegistration><ram:ID schemeID='VA'>${data.sellerVat}</ram:ID></ram:SpecifiedTaxRegistration>
+  </ram:SellerTradeParty>
+  <ram:BuyerTradeParty>
+    <ram:Name>${data.buyerName}</ram:Name>
+    <ram:PostalTradeAddress>
+      <ram:PostcodeCode>${data.buyerZip}</ram:PostcodeCode>
+      <ram:LineOne>${data.buyerStreet}</ram:LineOne>
+      <ram:CityName>${data.buyerCity}</ram:CityName>
+      <ram:CountryID>${data.buyerCountry}</ram:CountryID>
+    </ram:PostalTradeAddress>
+    
+  </ram:BuyerTradeParty>
+</ram:ApplicableHeaderTradeAgreement>
+
+  <ram:ApplicableHeaderTradeDelivery>
+  <ram:ActualDeliverySupplyChainEvent>
+    <ram:OccurrenceDateTime>
+      <udt:DateTimeString format='102'>${data.deliveryDate.replace(/-/g, '')}</udt:DateTimeString>
+    </ram:OccurrenceDateTime>
+  </ram:ActualDeliverySupplyChainEvent>
+</ram:ApplicableHeaderTradeDelivery>
+
+  <ram:ApplicableHeaderTradeSettlement>
+  <ram:InvoiceCurrencyCode>${data.currency}</ram:InvoiceCurrencyCode>
+  `
+
+let xml4 = ``
+for(let i = 0; i < positionIndex; i++)
+{
+  let n_total = (elem_quantity[i] * elem_price[i]);
+  xml4 = xml4 + `<ram:ApplicableTradeTax>
+  <ram:CalculatedAmount>${(n_total * elem_vat[i] / 100).toFixed(2)}</ram:CalculatedAmount>
+  <ram:TypeCode>VAT</ram:TypeCode>
+  <ram:BasisAmount>${n_total}</ram:BasisAmount>
+  <ram:CategoryCode>${catcode[i]}</ram:CategoryCode>
+  <ram:RateApplicablePercent>${elem_vat[i]}</ram:RateApplicablePercent>
+</ram:ApplicableTradeTax>`
+}
+let net_All = totalAmount - Allow_Amount;
+const xml5 = `
+  <ram:SpecifiedTradePaymentTerms>
+    <ram:Description>${data.payCondition}</ram:Description>
+    <ram:DueDateDateTime>
+      <udt:DateTimeString format='102'>${data.invoiceDate.replace(/-/g, '')}</udt:DateTimeString>
+    </ram:DueDateDateTime>
+  </ram:SpecifiedTradePaymentTerms>
+  <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+    <ram:LineTotalAmount>${totalAmount}</ram:LineTotalAmount>
+    <ram:AllowanceTotalAmount>${Allow_Amount}</ram:AllowanceTotalAmount>
+    <ram:TaxBasisTotalAmount>${net_All}</ram:TaxBasisTotalAmount>
+    <ram:TaxTotalAmount currencyID="${data.currency}">${totalVatAmount}</ram:TaxTotalAmount>
+    <ram:GrandTotalAmount>${net_All + totalVatAmount}</ram:GrandTotalAmount>
+    <ram:TotalPrepaidAmount>${prepaid}</ram:TotalPrepaidAmount>
+    <ram:DuePayableAmount>${net_All + totalVatAmount - parseFloat(prepaid)}</ram:DuePayableAmount>
+  </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+</ram:ApplicableHeaderTradeSettlement>
+
+</rsm:SupplyChainTradeTransaction>
+
+</rsm:CrossIndustryInvoice>`;
+
+      const xml = xml1 + xml2 + xml3 + xml4 + xml5;
+      const blob = new Blob([xml], { type: 'application/xml' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'xrechnung.xml';
+      a.click();
+    });
+  </script>
+  <div>
+    <a href=Apps.html>Zurück</a>
+  </div>
+  <div id="hinweis">
+    <p id="bold">Hinweis</p>
+    <p>Die eingegebenen Daten werden nicht geprüft. Für die Richtigkeit, Vollständigkeit und rechtliche Konformität der von Ihnen erstellten Rechnung übernehmen wir keine Haftung. Die Nutzung dieser Anwendung erfolgt auf eigene Verantwortung.
+    Rechtlicher Hinweis: Diese Anwendung stellt keine steuerliche oder rechtliche Beratung dar. Die Verantwortung für die inhaltliche Richtigkeit und gesetzliche Korrektheit der erstellten Rechnungen liegt vollständig beim Nutzer. Eine Haftung für etwaige Schäden, oder Nachteile, die durch fehlerhafte oder unvollständige Angaben entstehen, ist ausgeschlossen.
+    </p>
+  </div>
+</body>
+</html>
