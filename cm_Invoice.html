@@ -140,7 +140,25 @@
         <div class="position" id="p${positionIndex}">
           <label>Name der Leistung <input type="text" name="itemName" id="item${positionIndex}" required></label>
           <label>Beschreibung der Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description${positionIndex}"></label>
-          <label>Einheit (Optional)<input type="text" name="itemUnit" id="unit${positionIndex}"></label>
+          <select name="itemUnit" id="unit${positionIndex}">
+            <option value="C62" id="unit_type${positionIndex}">Stk. (Stück)</option>
+            <option value="DAY" id="unit_type${positionIndex}">Tag(e)</option>
+            <option value="HAR" id="unit_type${positionIndex}">ha (Hektar)</option>
+            <option value="HUR" id="unit_type${positionIndex}">Std. (Stunde(n))</option>
+            <option value="KGM" id="unit_type${positionIndex}">kg (Kilogramm)</option>
+            <option value="KTM" id="unit_type${positionIndex}">km (Kilometer)</option>
+            <option value="KWH" id="unit_type${positionIndex}">kWh (Kilowattstunde)</option>
+            <option value="LS" id="unit_type${positionIndex}">Pauschale</option>
+            <option value="LTR" id="unit_type${positionIndex}">l (Liter)</option>
+            <option value="MIN" id="unit_type${positionIndex}">min. (Minute)</option>
+            <option value="MMK" id="unit_type${positionIndex}">qmm (Quadratmillimeter)</option>
+            <option value="MMT" id="unit_type${positionIndex}">mm (Millimeter)</option>
+            <option value="MTK" id="unit_type${positionIndex}">qm (Quadratmeter)</option>
+            <option value="MTQ" id="unit_type${positionIndex}">m^3 (Kubikmeter)</option>
+            <option value="MTR" id="unit_type${positionIndex}">m (Meter)</option>
+            <option value="NAR" id="unit_type${positionIndex}">Anz. (Anzahl)</option>
+            <option value="TNE" id="unit_type${positionIndex}">t Tonne</option>
+          </select>
           <label>Anzahl <input type="number" step="0.01" name="itemQuantity" id="quantity${positionIndex}" required></label>
           <label>Netto-Betrag <input type="number" step="0.01" name="itemPrice" id="price${positionIndex}" required></label>
           <select id="Taxtype${positionIndex}" required>
@@ -184,7 +202,7 @@
         elem_quantity[i] = parseFloat(document.getElementById(idstr_Q).value);
         elem_price[i] = parseFloat(document.getElementById(idstr_price).value);
         elem_vatu[i] = document.getElementById(idstr_vat).value;
-        elem_unit[i] = parseFloat(document.getElementById(idstr_unit).value);
+        elem_unit[i] = document.getElementById(idstr_unit).value;
       }
 
       //get vat amount
@@ -274,7 +292,7 @@ for(let i = 0; i < positionIndex; i++)
     </ram:NetPriceProductTradePrice>
   </ram:SpecifiedLineTradeAgreement>
   <ram:SpecifiedLineTradeDelivery>
-    <ram:BilledQuantity unitCode='C62'>${elem_quantity[i]}</ram:BilledQuantity>
+    <ram:BilledQuantity unitCode='${elem_unit[i]}'>${elem_quantity[i]}</ram:BilledQuantity>
   </ram:SpecifiedLineTradeDelivery>
   <ram:SpecifiedLineTradeSettlement>
     <ram:ApplicableTradeTax>
