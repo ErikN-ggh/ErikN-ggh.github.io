@@ -128,13 +128,48 @@
     <label>Währung <input name="currency" required value="EUR"></label>
     <label>Vorauszahlungen <input name="Prepaid" id="Prepaid_id" value="0"></label>
     <label>Zahlungsbedingungen <input name="payCondition" value="keine"></label>
-    <div id="positionsContainer"></div>
+    <div id="positionsContainer">
+      <div class="position" id="p0">
+          <label>Name der Leistung <input type="text" name="itemName" id="item0" required></label>
+          <label>Beschreibung der Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description0"></label>
+          <select name="itemUnit" id="unit0">
+            <option value="C62" id="unit_type0">Stk. (Stück)</option>
+            <option value="DAY" id="unit_type0">Tag(e)</option>
+            <option value="HAR" id="unit_type0">ha (Hektar)</option>
+            <option value="HUR" id="unit_type0">Std. (Stunde(n))</option>
+            <option value="KGM" id="unit_type0">kg (Kilogramm)</option>
+            <option value="KTM" id="unit_type0">km (Kilometer)</option>
+            <option value="KWH" id="unit_type0">kWh (Kilowattstunde)</option>
+            <option value="LS" id="unit_type0">Pauschale</option>
+            <option value="LTR" id="unit_type0">l (Liter)</option>
+            <option value="MIN" id="unit_type0">min. (Minute)</option>
+            <option value="MMK" id="unit_type0">qmm (Quadratmillimeter)</option>
+            <option value="MMT" id="unit_type0">mm (Millimeter)</option>
+            <option value="MTK" id="unit_type0">qm (Quadratmeter)</option>
+            <option value="MTQ" id="unit_type0">m^3 (Kubikmeter)</option>
+            <option value="MTR" id="unit_type0">m (Meter)</option>
+            <option value="NAR" id="unit_type0">Anz. (Anzahl)</option>
+            <option value="TNE" id="unit_type0">t Tonne</option>
+          </select>
+          <label>Anzahl <input type="number" step="0.01" name="itemQuantity" id="quantity0" required></label>
+          <label>Netto-Betrag <input type="number" step="0.01" name="itemPrice" id="price0" required></label>
+          <select id="Taxtype0" required>
+            <option value="S19" id="vatRate0">Standardsteuersatz (19%)</option>
+            <option value="S7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
+            <option value="E" id="vatRate0">Steuerbefreite Position </option>
+            <option value="Z0" id="vatRate0">Nullsteuersatz (0%)</option>
+            <option value="K" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
+            <option value="AE" id="vatRate0">Vorsteuer</option>
+            <option value="G" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
+            </select>
+        </div>
+    </div>
     <button type="button" onclick="addPosition()">Position hinzufügen</button>
     <button type="submit">XRechnung erstellen</button>
   </form>
 
   <script>
-    let positionIndex = 0;
+    let positionIndex = 1;
     let total_Net = 0;
     let totalVatAmount = 0;
 
