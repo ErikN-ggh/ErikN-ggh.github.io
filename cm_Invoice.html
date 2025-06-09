@@ -250,7 +250,6 @@
       //get vat amount
       for(let i = 0; i < positionIndex; i++)
       {
-        console.log(elem_vatu[i]);
         elem_vat[i] = 0;
         let nstr = "";
         let numstr = "";
@@ -266,15 +265,11 @@
                 nstr = nstr + str[j]
             }
         }
-        console.log(numstr);
-        console.log(nstr);
         if(!isNaN(parseInt(numstr)))
         {
           elem_vat[i] = parseInt(numstr);
         }
         catcode[i] = nstr;
-        console.log(elem_vat[i])
-        console.log(catcode[i]);
       }
       const data = Object.fromEntries(new FormData(e.target));
       for(let i = 0; i < positionIndex; i++)
