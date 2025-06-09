@@ -421,9 +421,9 @@ const xml5 = `
     <ram:AllowanceTotalAmount>${Allow_Amount}</ram:AllowanceTotalAmount>
     <ram:TaxBasisTotalAmount>${net_All}</ram:TaxBasisTotalAmount>
     <ram:TaxTotalAmount currencyID="${data.currency}">${totalVatAmount}</ram:TaxTotalAmount>
-    <ram:GrandTotalAmount>${net_All + totalVatAmount}</ram:GrandTotalAmount>
+    <ram:GrandTotalAmount>${(net_All + totalVatAmount).toFixed(2)}</ram:GrandTotalAmount>
     <ram:TotalPrepaidAmount>${prepaid}</ram:TotalPrepaidAmount>
-    <ram:DuePayableAmount>${net_All + totalVatAmount - parseFloat(prepaid)}</ram:DuePayableAmount>
+    <ram:DuePayableAmount>${(net_All + totalVatAmount - parseFloat(prepaid)).toFixed(2)}</ram:DuePayableAmount>
   </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
 </ram:ApplicableHeaderTradeSettlement>
 
