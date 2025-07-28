@@ -159,8 +159,8 @@
             <label>Zahlungsbedingungen <input name="payCondition" value="keine"></label>
             <div id="positionsContainer">
                 <div class="position" id="p0">
-                    <label>Name der Leistung <input type="text" name="itemName" id="item0" required></label>
-                    <label>Beschreibung der Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description0"></label>
+                    <label>Name der Ware/Leistung <input type="text" name="itemName" id="item0" required></label>
+                    <label>Beschreibung der Ware/Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description0"></label>
                     <select name="itemUnit" id="unit0">
                         <option value="C62" id="unit_type0">Stk. (Stück)</option>
                         <option value="DAY" id="unit_type0">Tag(e)</option>
@@ -207,8 +207,8 @@
 
             const positionHTML = `
             <div class="position" id="p${positionIndex}">
-                <label>Name der Leistung <input type="text" name="itemName" id="item${positionIndex}" required></label>
-                <label>Beschreibung der Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description${positionIndex}"></label>
+                <label>Name der Ware/Leistung <input type="text" name="itemName" id="item${positionIndex}" required></label>
+                <label>Beschreibung der Ware/Leistung, angabe einer Begründung bei USt-Befreiung<input type="text" name="ietmdescription" id="description${positionIndex}"></label>
                 <select name="itemUnit" id="unit${positionIndex}">
                     <option value="C62" id="unit_type${positionIndex}">Stk. (Stück)</option>
                     <option value="DAY" id="unit_type${positionIndex}">Tag(e)</option>
