@@ -128,13 +128,12 @@
 
             <label>Umsatzsteuer in %</label>
             <select id="taxRate0" required>
-                <option value="S19" id="vatRate0">Standardsteuersatz (19%)</option>
-                <option value="S7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
-                <option value="E" id="vatRate0">Steuerbefreite Position </option>
-                <option value="Z0" id="vatRate0">Nullsteuersatz (0%)</option>
-                <option value="K" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
-                <option value="AE" id="vatRate0">Vorsteuer</option>
-                <option value="G" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
+                <option value="19" id="vatRate0">Standardsteuersatz (19%)</option>
+                <option value="7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
+                <option value="0" id="vatRate0">Steuerbefreite Position </option>
+                <option value="0" id="vatRate0">Nullsteuersatz (0%)</option>
+                <option value="0" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
+                <option value="0" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
             </select>
         </div>
     </div>
@@ -162,13 +161,12 @@
 
                 <label>Umsatzsteuer in %</label>
                 <select id="taxRate${positionIndex}" required>
-                    <option value="S19" id="vatRate0">Standardsteuersatz (19%)</option>
-                    <option value="S7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
-                    <option value="E" id="vatRate0">Steuerbefreite Position </option>
-                    <option value="Z0" id="vatRate0">Nullsteuersatz (0%)</option>
-                    <option value="K" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
-                    <option value="AE" id="vatRate0">Vorsteuer</option>
-                    <option value="G" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
+                    <option value="19" id="vatRate${positionIndex}">Standardsteuersatz (19%)</option>
+                    <option value="7" id="vatRate${positionIndex}">ermäßigter Steuersatz (7%)</option>
+                    <option value="0" id="vatRate${positionIndex}">Steuerbefreite Position </option>
+                    <option value="0" id="vatRate${positionIndex}">Nullsteuersatz (0%)</option>
+                    <option value="0" id="vatRate${positionIndex}">Steuerbefreite innergemeinschaftliche Lieferung</option>
+                    <option value="0" id="vatRate${positionIndex}">Steuerbefreites Wirtschaftsgut</option>
                 </select>
             </div>`;
             container.insertAdjacentHTML('beforeend', positionHTML);
@@ -201,7 +199,7 @@
                 Info[i] = document.getElementById("Info" + i.toString()).value;        
                 Units[i] = document.getElementById("units" + i.toString()).value;
                 NetAmount[i] = document.getElementById("netAmount" + i.toString()).value;
-                TaxRate[i] = document.getElementById("taxRate" + i.toString()).value;
+                TaxRate[i] = document.getElementById("vatRate" + i.toString()).value;
                 positionNetTotal[i] = NetAmount[i] * Units[i];
                 vat[i] = (positionNetTotal[i] * TaxRate[i]) / 100;
                 positionTotal[i] = positionNetTotal[i] + parseFloat(vat[i].toFixed(2));
