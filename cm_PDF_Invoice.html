@@ -227,9 +227,9 @@
                 doc.text(2, 11.5, "Beschreibung");
                 doc.text(9, 11.5, "Menge:");
                 doc.text(10.5, 11.5, "Netto / Einheit:");
-                doc.text(12.5, 11.5, "Netto:");
+                doc.text(12.8, 11.5, "Netto:");
                 doc.text(14.5, 11.5, "USt %:");
-                doc.text(16, 11.5, "USt €:");
+                doc.text(16, 11.5, "USt:");
                 doc.text(18, 11.5, "Brutto:");
                 doc.setFont('Helvetica', 'normal');
                 for(let i = 0; i < positionIndex; i++)
@@ -237,9 +237,9 @@
                     doc.text(2, pos, Info[i]);
                     doc.text(9, pos, Units[i]);
                     doc.text(10.5, pos, NetAmount[i] + "€");
-                    doc.text(12.5, pos, positionNetTotal[i].toString() + "€");
+                    doc.text(12.8, pos, positionNetTotal[i].toString() + "€");
                     doc.text(14.5, pos, TaxRate[i]);
-                    doc.text(16, pos, vat[i].toFixed(2));
+                    doc.text(16, pos, vat[i].toFixed(2) + "€");
                     doc.text(18, pos, positionTotal[i].toFixed(2).toString() + "€");
                     pos = pos + 0.5;
                     if(pos == 25)
