@@ -200,6 +200,7 @@
                 Units[i] = document.getElementById("units" + i.toString()).value;
                 NetAmount[i] = document.getElementById("netAmount" + i.toString()).value;
                 TaxRate[i] = document.getElementById("vatRate" + i.toString()).value;
+                console.log(TaxRate[i];
                 positionNetTotal[i] = NetAmount[i] * Units[i];
                 vat[i] = (positionNetTotal[i] * TaxRate[i]) / 100;
                 positionTotal[i] = positionNetTotal[i] + parseFloat(vat[i].toFixed(2));
