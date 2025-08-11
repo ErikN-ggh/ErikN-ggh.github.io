@@ -127,7 +127,15 @@
             <input type="text" id="netAmount0" required>
 
             <label>Umsatzsteuer in %</label>
-            <input type="text" id="taxRate0" required>
+            <select id="taxRate0" required>
+                <option value="S19" id="vatRate0">Standardsteuersatz (19%)</option>
+                <option value="S7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
+                <option value="E" id="vatRate0">Steuerbefreite Position </option>
+                <option value="Z0" id="vatRate0">Nullsteuersatz (0%)</option>
+                <option value="K" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
+                <option value="AE" id="vatRate0">Vorsteuer</option>
+                <option value="G" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
+            </select>
         </div>
     </div>
     
@@ -153,7 +161,15 @@
                 <input type="text" id="netAmount${positionIndex}">
 
                 <label>Umsatzsteuer in %</label>
-                <input type="text" id="taxRate${positionIndex}">
+                <select id="taxRate${positionIndex}" required>
+                    <option value="S19" id="vatRate0">Standardsteuersatz (19%)</option>
+                    <option value="S7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
+                    <option value="E" id="vatRate0">Steuerbefreite Position </option>
+                    <option value="Z0" id="vatRate0">Nullsteuersatz (0%)</option>
+                    <option value="K" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
+                    <option value="AE" id="vatRate0">Vorsteuer</option>
+                    <option value="G" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
+                </select>
             </div>`;
             container.insertAdjacentHTML('beforeend', positionHTML);
             positionIndex++;
