@@ -109,6 +109,9 @@
     <label>Zahlungsbedingungen</label>
     <input type="text" id="conditions" value="Rechnung innerhalb von 14 Tagen zahlbar">
 
+    <label>Hinweise</label>
+    <input type="text" id="notes" value="Diese Rechnung ist 3 Jahre vom Empfänger aufzubewahren">
+
     <label>Grußformel</label>
     <textarea id="greeding" value="Mit freundlichen Grüßen"></textarea>
 
@@ -184,6 +187,7 @@
             let Type = document.getElementById("documentType").value;
             let Cond = document.getElementById("conditions").value;
             let Greed = document.getElementById("greeding").value;
+            let Note = document.getElementById("notes").value;
 
             let Info = [];
             let Units = [];
@@ -209,7 +213,51 @@
             if(InvoiceNumber == '')
             {
                 alert("Bitte geben sie eine Rechnungsnummer an");
+                return;
             }
+
+            if(SellerAddress == '')
+            {
+                alert("Bitte geben sie die Adresse des Unternehmens an");
+                return;
+            }
+
+            if(BuyerAddress == '')
+            {
+                alert("Bitte geben sie die Adresse des Empfängers an");
+                return;
+            }
+
+            if(TaxId == '')
+            {
+                alert("Bitte geben sie eine Steuernummer oder USt-IdNr an");
+                return;
+            }
+
+            if(Date == '')
+            {
+                alert("Bitte geben sie ein Rechnungsdatum an");
+                return;
+            }
+
+            if(DeliveryDate == '')
+            {
+                alert("Bitte geben sie ein Lieferdatum an");
+                return;
+            }
+
+            if(Type == '')
+            {
+                alert("Bitte geben sie an, ob sie eine Rechnung oder Gutschrift erstellen.");
+                return;
+            }
+
+            if(Type == '')
+            {
+                alert("Bitte geben sie an, ob sie eine Rechnung oder Gutschrift erstellen.");
+                return;
+            }
+            
 
             //create PDF
 
@@ -270,6 +318,7 @@
                 doc.text(2, pos + 2, Cond);
                 doc.setFontSize(12);
                 doc.text(14, pos + 3, "Rechnungsbetrag: " + total.toFixed(2) + "€");
+                doc.text(2, pos + 2.5, Note);
                 doc.text(2, pos + 3, Greed);
 
                 doc.save(Type.toString() + "_" + InvoiceNumber.toString());
