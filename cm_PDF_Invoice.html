@@ -316,9 +316,9 @@
                     }
                 }
                 doc.text(2, pos + 2, Cond);
+                doc.text(2, pos + 2.5, Note);
                 doc.setFontSize(12);
                 doc.text(14, pos + 3, "Rechnungsbetrag: " + total.toFixed(2) + "€");
-                doc.text(2, pos + 2.5, Note);
                 doc.text(2, pos + 3, Greed);
 
                 doc.save(Type.toString() + "_" + InvoiceNumber.toString());
