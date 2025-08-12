@@ -205,6 +205,11 @@
                 positionTotal[i] = positionNetTotal[i] + parseFloat(vat[i].toFixed(2));
                 total = total + positionTotal[i];
             }
+            //check minimal requirements
+            if(InvoiceNumber ==')
+            {
+                alert("Bitte geben sie eine Rechnungsnummer an");
+            }
 
             //create PDF
 
