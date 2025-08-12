@@ -121,7 +121,7 @@
     <div id="positionsContainer">
         <div class="position" id="position0">
             <label>Beschreibung der Ware / Leistung</label>
-            <input type="text" id="Info0" required>
+            <input type="text" id="Info0" maxlength="35" required>
 
             <label>Menge</label>
             <input type="text" id="units0" required>
@@ -154,7 +154,7 @@
             const positionHTML = `
             <div class="position" id="${positionIndex}">
                 <label>Beschreibung der Ware / Leistung</label>
-                <input type="text" id="Info${positionIndex}">
+                <input type="text" id="Info${positionIndex}" maxlength="35">
 
                 <label>Menge</label>
                 <input type="text" id="units${positionIndex}">
