@@ -112,6 +112,9 @@
     <label>Hinweise</label>
     <input type="text" id="notes" value="Bitte bewahren sie diese Rechnung bis 3 Jahre nach erhalt der Rechnung auf.">
 
+    <label>Zahlungsinformationen</label>
+    <textarea type="text" id="payment"></textarea>
+
     <label>Grußformel</label>
     <textarea id="greeding" value="Mit freundlichen Grüßen"></textarea>
 
@@ -188,6 +191,7 @@
             let Cond = document.getElementById("conditions").value;
             let Greed = document.getElementById("greeding").value;
             let Note = document.getElementById("notes").value;
+            let Payment = document.getElementById("payment").value;
 
             let Info = [];
             let Units = [];
@@ -318,8 +322,13 @@
                 doc.text(2, pos + 2, Cond);
                 doc.text(2, pos + 2.5, Note);
                 doc.setFontSize(12);
-                doc.text(14, pos + 3, "Rechnungsbetrag: " + total.toFixed(2) + "€");
-                doc.text(2, pos + 3, Greed);
+                doc.text(14, pos + 4, "Rechnungsbetrag: " + total.toFixed(2) + "€");
+                doc.text(2, pos + 4, Greed);
+                doc.setFontSize(10);
+                if(Payment != '')
+                {
+                    doc.text(2, pos + 6, "Zahlungsinformationen" + Payment);
+                }
 
                 doc.save(Type.toString() + "_" + InvoiceNumber.toString());
             };
