@@ -330,7 +330,7 @@
                 doc.setFontSize(10);
                 if(Payment != '')
                 {
-                    doc.text(2, pos + 6, "Zahlungsinformationen" + Payment);
+                    doc.text(2, pos + 6, "Zahlungsinformationen: " + Payment);
                 }
 
                 doc.save(Type.toString() + "_" + InvoiceNumber.toString());
