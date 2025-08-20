@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFs erstellen</title>
+    <link rel="icon" type="image/x-icon" href="simplified_Logo.png">
+    <link rel="stylesheet" type="text/css" href="style4.css">
+</head>
+<body>
+    <style>
+        .app-grid
+        {
+            width: 100%;
+            margin: 0 auto;
+            padding: 16px;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 16px;
+        }
+        .app-tile
+        {
+            display: grid;
+            place-items: center;
+            aspect-ratio: 1 / 1;
+            background: #f4f6f8;
+            border-radius: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            text-decoration: none;
+            transition: transform 0.12s ease, box-shadow 0.12s ease;
+            overflow: hidden;
+        }
+        .app-tile:hover
+        {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        .app-tile img
+        {
+            width: 65%;
+            height: 65%;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+        }
+    </style>
+    <div class="box content">
+        <header>
+            <a href="#" class="logo"><img src="Logo.png"> <p>Nürnberger Digital Services</p></a>
+            <ul>
+               <li><a href="Apps.html">Zurück</a></li>
+            </ul>
+        </header>
+
+          
+          <div class="app-grid">
+            <a class="app-tile" href="cm_PDF_Invoice.html" aria-label="App 1">
+                <img src="Logo1.png" alt="App 1">
+            </a>
+            <a class="app-tile" href="cm_PDF_Offer.html" aria-label="App 2">
+                <img src="Logo2.png" alt="App 2">
+            </a>
+            <a class="app-tile" href="cm_PDF_reminder.html" aria-label="App 3">
+                <img src="Logo3.png" alt="App 3">
+            </a>
+            </div>
+          <ul class="sci">
+            <h3>Folgen sie uns:</h3>
+            <li><a href="https://www.linkedin.com/in/erik-n%C3%BCrnberger-b4909a276/"><img src="LinkedIn.png"></a></li>
+            <li><a href="https://www.instagram.com/nuernberger_digital_services?igsh=MTBzdjl0Z3NwdmNxNQ=="><img src="Instagram.png"></a></li>
+          </ul>
+        </div>
+</body>
+</html>
