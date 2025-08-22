@@ -204,7 +204,7 @@
             let BuyerAddress = document.getElementById("buyer").value;
             let TaxId = document.getElementById("taxId").value;
             let datestr = document.getElementById("date").value;
-            let DeliveryDate = document.getElementById("deliveryDate").value;
+            let datestr2 = document.getElementById("deliveryDate").value;
             let Type = document.getElementById("documentType").value;
             let Cond = document.getElementById("conditions").value;
             let Greed = document.getElementById("greeding").value;
@@ -213,6 +213,8 @@
 
             let d1 = datestr.replace('-', '.');
             let Date = d1.replace('-', '.');
+            let d2 = datestr.replace('-', '.');
+            let DeliveryDate = d2.replace('-', '.');
 
             let Info = [];
             let Units = [];
@@ -268,12 +270,6 @@
             if(DeliveryDate == '')
             {
                 alert("Bitte geben sie ein Lieferdatum an");
-                return;
-            }
-
-            if(Type == '')
-            {
-                alert("Bitte geben sie an, ob sie eine Rechnung oder Gutschrift erstellen.");
                 return;
             }
 
