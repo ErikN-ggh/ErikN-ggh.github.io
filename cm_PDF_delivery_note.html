@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="simplified_Logo.png">
+    <title>Lieferschein erstellen</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body
+        {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+        }
+        label
+        {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        input, textarea, select
+        {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 95%;
+            margin-top: 0.25rem;
+        }
+        button
+        {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #btn
+        {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .position
+        {
+            margin-top: 15px;
+            border: 1px solid #cfcfcf;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #f1f1f1;
+        }
+        #hinweis
+        {
+            padding: 1pt;
+            border-radius: 5px;
+            border: 1px solid #ff6f6f;
+        }
+        #Back
+        {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        #hinweis p
+        {
+            text-align: center;
+            color: rgb(175, 175, 175);
+            padding: 1px;
+            font-size: 10pt;
+        }
+        .id_back
+        {
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lieferschein erstellen</h1>
+    <label>Lieferschein Nummer:</label>
+    <input type="text" id="del_num" required>
+
+    <label>Name & Anschrift des Unternehmers</label>
+    <textarea id="seller" required></textarea>
+
+    <label>Name & Anschrift des Empfängers</label>
+    <textarea id="buyer" required></textarea>
+
+    <label>Datum</label>
+    <input type="date" id="date" required>
+
+    <label>Text</label>
+    <input type="text" id="notes" value="Wir bedanken uns für ihre Mitarbeit.">
+
+    <label>Grußformel</label>
+    <textarea id="greeding" value="Mit freundlichen Grüßen"></textarea>
+
+    <label>Logo hochladen</label>
+    <input type="file" id="imageInput" accept="image/*">
+
+    <div id="positionsContainer">
+        <div class="position" id="position0">
+            <label>Beschreibung der Ware / Leistung</label>
+            <input type="text" id="Info0" maxlength="35" required>
+
+            <label>Menge</label>
+            <input type="text" id="units0" required>
+            
+            <label>Nettobetrag pro Einheit (in €)</label>
+            <input type="text" id="netAmount0" required>
+
+            <label>Umsatzsteuer in %</label>
+            <select id="taxRate0" required>
+                <option value="19" id="vatRate0">Standardsteuersatz (19%)</option>
+                <option value="7" id="vatRate0">ermäßigter Steuersatz (7%)</option>
+                <option value="0" id="vatRate0">Steuerbefreite Position </option>
+                <option value="0" id="vatRate0">Nullsteuersatz (0%)</option>
+                <option value="0" id="vatRate0">Steuerbefreite innergemeinschaftliche Lieferung</option>
+                <option value="0" id="vatRate0">Steuerbefreites Wirtschaftsgut</option>
+            </select>
+        </div>
+    </div>
+    
+    
+    <button type="button" onclick="addPosition()">Position hinzufügen</button>
+
+    <button type="submit" onclick="generatePDF()">PDF-Rechnung erstellen</button>
+    <script>
+        let positionIndex = 1;
+        function addPosition()
+        {
+            const container = document.getElementById('positionsContainer');
+
+            const positionHTML = `
+            <div class="position" id="${positionIndex}">
+                <label>Beschreibung der Ware / Leistung</label>
+                <input type="text" id="Info${positionIndex}" maxlength="35">
+
+                <label>Menge</label>
+                <input type="text" id="units${positionIndex}">
+                
+                <label>Nettobetrag pro Einheit (in €)</label>
+                <input type="text" id="netAmount${positionIndex}">
+
+                <label>Umsatzsteuer in %</label>
+                <select id="taxRate${positionIndex}" required>
+                    <option value="19" id="vatRate${positionIndex}">Standardsteuersatz (19%)</option>
+                    <option value="7" id="vatRate${positionIndex}">ermäßigter Steuersatz (7%)</option>
+                    <option value="0" id="vatRate${positionIndex}">Steuerbefreite Position </option>
+                    <option value="0" id="vatRate${positionIndex}">Nullsteuersatz (0%)</option>
+                    <option value="0" id="vatRate${positionIndex}">Steuerbefreite innergemeinschaftliche Lieferung</option>
+                    <option value="0" id="vatRate${positionIndex}">Steuerbefreites Wirtschaftsgut</option>
+                </select>
+            </div>`;
+            container.insertAdjacentHTML('beforeend', positionHTML);
+            positionIndex++;
+        }
+        function readFileAsDataURL(file)
+        {
+            return new Promise((resolve, reject) => 
+            {
+                if(!file)
+                {
+                    resolve(null);
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function generatePDF()
+        {
+            let DeliveryNumber = document.getElementById("del_num").value;
+            let SellerAddress = document.getElementById("seller").value;
+            let BuyerAddress = document.getElementById("buyer").value;
+            let datestr = document.getElementById("date").value;
+            let Greed = document.getElementById("greeding").value;
+            let Note = document.getElementById("notes").value;
+
+            let d1 = datestr.replace('-', '.');
+            let Date = d1.replace('-', '.');
+
+            let Info = [];
+            let Units = [];
+            let NetAmount = [];
+            let TaxRate = [];
+            let positionNetTotal = [];
+            let vat = [];
+            let positionTotal = [];
+
+            for(let i = 0; i < positionIndex; i++)
+            {
+                Info[i] = document.getElementById("Info" + i.toString()).value;        
+                Units[i] = document.getElementById("units" + i.toString()).value;
+                NetAmount[i] = document.getElementById("netAmount" + i.toString()).value;
+                TaxRate[i] = document.getElementById("taxRate" + i.toString()).value;
+                positionNetTotal[i] = NetAmount[i] * Units[i];
+                vat[i] = (positionNetTotal[i] * TaxRate[i]) / 100;
+                positionTotal[i] = positionNetTotal[i] + parseFloat(vat[i].toFixed(2));
+            }
+            //check minimal requirements
+            if(DeliveryNumber == '')
+            {
+                alert("Bitte geben sie eine Lieferscheinnummer an");
+                return;
+            }
+
+            if(SellerAddress == '')
+            {
+                alert("Bitte geben sie die Adresse des Unternehmens an");
+                return;
+            }
+
+            if(BuyerAddress == '')
+            {
+                alert("Bitte geben sie die Adresse des Empfängers an");
+                return;
+            }
+
+            if(Date == '')
+            {
+                alert("Bitte geben sie ein Rechnungsdatum an");
+                return;
+            }
+
+            //create PDF
+
+            const {jsPDF} = window.jspdf;
+            const doc = new jsPDF('p', 'cm', 'a4');
+
+            const fileInput = document.getElementById("imageInput");
+            const file = fileInput.files[0];
+
+            const [logoData, qrData] = await Promise.all([
+                readFileAsDataURL(file)
+            ]);
+            
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(20);
+            doc.text(9, 4, "Lieferschein");
+            doc.setFontSize(12);
+            doc.text(2, 6, BuyerAddress);
+            doc.text(14, 6, SellerAddress);
+            doc.text(14, 8, "Lieferschein Nr:: " + DeliveryNumber);
+            doc.text(14, 8.5, "Datum: " + Date);
+
+            doc.setFontSize(8);
+            doc.setFont('Helvetica', 'bold');
+                
+            let pos = 12;
+            doc.text(2, 11.5, "Beschreibung");
+            doc.text(9, 11.5, "Menge:");
+            doc.text(10.5, 11.5, "Netto / Einheit:");
+            doc.text(12.8, 11.5, "Netto:");
+            doc.text(14.5, 11.5, "USt %:");
+            doc.text(16, 11.5, "USt:");
+            doc.text(18, 11.5, "Brutto:");
+            doc.setFont('Helvetica', 'normal');
+            for(let i = 0; i < positionIndex; i++)
+            {
+                doc.text(2, pos, Info[i]);
+                doc.text(9, pos, Units[i]);
+                doc.text(10.5, pos, NetAmount[i] + "€");
+                doc.text(12.8, pos, positionNetTotal[i].toString() + "€");
+                doc.text(14.5, pos, TaxRate[i]);
+                doc.text(16, pos, vat[i].toFixed(2) + "€");
+                doc.text(18, pos, positionTotal[i].toFixed(2).toString() + "€");
+                pos = pos + 0.5;
+                if(pos == 25)
+                {
+                    doc.addPage();
+                    pos = 4;
+                }
+            }
+            doc.text(2, pos + 2.5, Note);
+            doc.setFontSize(12);
+            doc.text(2, pos + 4, Greed);
+            doc.setFontSize(10);
+
+
+            // Logo einfügen
+            if(logoData)
+            {
+                doc.addImage(logoData, 'JPEG', 14, 2, 4, 0);
+            }
+
+            doc.save("Lieferschein" + "_" + DeliveryNumber.toString());
+        }
+    </script>
+
+    <div id="Back">
+        <a href=Apps.html>Zurück</a>
+    </div>
+    <div id="hinweis">
+        <p id="bold">Hinweis</p>
+        <p>Die eingegebenen Daten werden nicht geprüft. Für die Richtigkeit, Vollständigkeit und rechtliche Konformität der von Ihnen erstellten Rechnung übernehmen wir keine Haftung. Die Nutzung dieser Anwendung erfolgt auf eigene Verantwortung.
+        Rechtlicher Hinweis: Diese Anwendung stellt keine steuerliche oder rechtliche Beratung dar. Die Verantwortung für die inhaltliche Richtigkeit und gesetzliche Korrektheit der erstellten Lieferscheine liegt vollständig beim Nutzer. Eine Haftung für etwaige Schäden, oder Nachteile, die durch fehlerhafte oder unvollständige Angaben entstehen, ist ausgeschlossen.
+        Für Buchungsbelege (Lieferscheine, Kostenbelege) werden ab 2025 die handels- und steuerrechtlichen Aufbewahrungsfristen von 10 auf 8 Jahre verkürzt (§ 147 Abs. 1 Nr. 4 i.V.m. Abs. 3 Satz 1 AO sowie § 257 Abs. 1 Nr. 4 i.V.m. Abs. 4 HGB). Für die Aufbewahrung der Lieferscheine ist der Nutzer selbst verantwortlich.
+        </p>
+      </div>
+</body>
+</html>
