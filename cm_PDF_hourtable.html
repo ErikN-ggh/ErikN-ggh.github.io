@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="simplified_Logo.png">
+    <title>Stundenzettel erstellen</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body
+        {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            max-width: 600px;
+            margin: auto;
+        }
+        label
+        {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        input, textarea, select
+        {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 95%;
+            margin-top: 0.25rem;
+        }
+        button
+        {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #btn
+        {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .position
+        {
+            margin-top: 15px;
+            border: 1px solid #cfcfcf;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #f1f1f1;
+        }
+        #hinweis
+        {
+            padding: 1pt;
+            border-radius: 5px;
+            border: 1px solid #ff6f6f;
+        }
+        #Back
+        {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        #hinweis p
+        {
+            text-align: center;
+            color: rgb(175, 175, 175);
+            padding: 1px;
+            font-size: 10pt;
+        }
+        .id_back
+        {
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stundenzettel erstellen</h1>
+
+    <label>Name</label>
+    <input type="text" id="name" required>
+
+    <label>Erstelldatum</label>
+    <input type="date" id="date" required>
+
+    <label>Zeitraum</label>
+    <input type="text" id="timespan" value="">
+
+    <label>Personalnummer</label>
+    <input type="text" id="personalnumber" value="">
+
+    <label>Logo hochladen</label>
+    <input type="file" id="imageInput" accept="image/*">
+
+    <div id="positionsContainer">
+        <div class="position" id="position0">
+            <label>Datum</label>
+            <input type="date" id="posdate0" required>
+
+            <label>Beginn</label>
+            <input type="text" id="start0" value="">
+
+            <label>Ende</label>
+            <input type="text" id="end0" value="">
+
+            <label>Pause</label>
+            <input type="text" id="pause0" value="">
+
+            <label>Auftrag/Objekt</label>
+            <input type="text" id="obj0" value="">
+
+            <label>Zeit</label>
+            <input type="text" id="time0" value="">
+        </div>
+    </div>
+    
+    
+    <button type="button" onclick="addPosition()">Position hinzufügen</button>
+
+    <button type="submit" onclick="generatePDF()">Stundenzettel erstellen</button>
+    <script>
+        let positionIndex = 1;
+        function addPosition()
+        {
+            const container = document.getElementById('positionsContainer');
+
+            const positionHTML = `
+            <div class="position" id="${positionIndex}">
+                <label>Datum</label>
+                <input type="date" id="posdate${positionIndex}" required>
+
+                <label>Beginn</label>
+                <input type="text" id="start${positionIndex}" value="">
+
+                <label>Ende</label>
+                <input type="text" id="end${positionIndex}" value="">
+
+                <label>Pause</label>
+                <input type="text" id="pause${positionIndex}" value="">
+
+                <label>Auftrag/Objekt</label>
+                <input type="text" id="obj${positionIndex}" value="">
+
+                <label>Zeit</label>
+                <input type="text" id="time${positionIndex}" value="">
+            </div>`;
+            container.insertAdjacentHTML('beforeend', positionHTML);
+            positionIndex++;
+        }
+        function readFileAsDataURL(file)
+        {
+            return new Promise((resolve, reject) => 
+            {
+                if(!file)
+                {
+                    resolve(null);
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function generatePDF()
+        {
+            let Name = document.getElementById("name").value;
+            let datestr = document.getElementById("date").value;
+            let PersonalNum = document.getElementById("personalnumber").value;
+            let Timespan = document.getElementById("timespan").value;
+
+            let d1 = datestr.replace('-', '.');
+            let Date = d1.replace('-', '.');
+
+            let Posdate = [];
+            let Start = [];
+            let End = [];
+            let Pause = [];
+            let Obj = [];
+            let Time = [];
+            let TotalTime = 0;
+
+            for(let i = 0; i < positionIndex; i++)
+            {
+                let date1 = document.getElementById("posdate" + i.toString()).value;
+                let d2 = date1.replace('-', '.');
+                Posdate[i] = d2.replace('-', '.');
+                Start[i] = document.getElementById("start" + i.toString()).value;
+                End[i] = document.getElementById("end" + i.toString()).value;
+                Pause[i] = document.getElementById("pause" + i.toString()).value;
+                Obj[i] = document.getElementById("obj" + i.toString()).value;
+                Time[i] = document.getElementById("time" + i.toString()).value;
+                TotalTime = TotalTime + parseFloat(Time[i]);
+            }
+
+            //create PDF
+
+            const {jsPDF} = window.jspdf;
+            const doc = new jsPDF('p', 'cm', 'a4');
+
+            const fileInput = document.getElementById("imageInput");
+            const file = fileInput.files[0];
+
+            const [logoData, qrData] = await Promise.all([
+                readFileAsDataURL(file)
+            ]);
+            
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(20);
+            doc.text(2, 4, "Stundenzettel");
+            doc.setFontSize(12);
+            doc.text(2, 6, "Name: " + Name);
+            doc.text(2, 6.5, "Zeitraum: " + Timespan);
+            doc.text(2, 7, "Datum: " + Date);
+            doc.text(2, 7.5, "Personalnummer: " + PersonalNum);
+
+            doc.setFontSize(10);
+            doc.setFont('Helvetica', 'bold');
+                
+            let pos = 12;
+            doc.text(2, 11.5, "Datum:");
+            doc.text(4, 11.5, "Beginn:");
+            doc.text(6, 11.5, "Ende:");
+            doc.text(8, 11.5, "Pause:");
+            doc.text(10, 11.5, "Auftrag/Objekt:");
+            doc.text(14, 11.5, "Zeit:");
+            doc.setFont('Helvetica', 'normal');
+            for(let i = 0; i < positionIndex; i++)
+            {
+                doc.text(2, pos, Posdate[i]);
+                doc.text(4, pos, Start[i]);
+                doc.text(6, pos, End[i]);
+                doc.text(8, pos, Pause[i]);
+                doc.text(10, pos, Obj[i]);
+                doc.text(14, pos, Time[i]);
+                pos = pos + 0.5;
+                if(pos == 25)
+                {
+                    doc.addPage();
+                    pos = 4;
+                }
+            }
+            doc.text(14, pos + 2, TotalTime.toString());
+
+
+            // Logo einfügen
+            if(logoData)
+            {
+                doc.addImage(logoData, 'JPEG', 14, 2, 4, 0);
+            }
+
+            doc.save("Stundenzettel" + "_" + Timespan);
+        }
+    </script>
+
+    <div id="Back">
+        <a href="PDF_ind.html">Zurück</a>
+    </div>
+    <div id="hinweis">
+        <p id="bold">Hinweis</p>
+        <p>Die eingegebenen Daten werden nicht geprüft. Für die Richtigkeit, Vollständigkeit und rechtliche Konformität des von Ihnen erstellten Stundenzettels übernehmen wir keine Haftung. Die Nutzung dieser Anwendung erfolgt auf eigene Verantwortung.
+        Rechtlicher Hinweis: Diese Anwendung stellt keine steuerliche oder rechtliche Beratung dar. Die Verantwortung für die inhaltliche Richtigkeit und gesetzliche Korrektheit der erstellten Stundenzettel liegt vollständig beim Nutzer. Eine Haftung für etwaige Schäden, oder Nachteile, die durch fehlerhafte oder unvollständige Angaben entstehen, ist ausgeschlossen.
+        </p>
+      </div>
+</body>
+</html>
