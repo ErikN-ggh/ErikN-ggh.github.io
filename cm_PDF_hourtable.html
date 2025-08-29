@@ -86,47 +86,49 @@
 <body>
     <h1>Stundenzettel erstellen</h1>
 
-    <label>Name</label>
-    <input type="text" id="name" required>
+    <form>
+        <label>Name</label>
+        <input type="text" id="name" required>
 
-    <label>Erstelldatum</label>
-    <input type="date" id="date" required>
+        <label>Erstelldatum</label>
+        <input type="date" id="date" required>
 
-    <label>Zeitraum</label>
-    <input type="text" id="timespan" value="">
+        <label>Zeitraum</label>
+        <input type="text" id="timespan" value="" required>
 
-    <label>Personalnummer</label>
-    <input type="text" id="personalnumber" value="">
+        <label>Personalnummer</label>
+        <input type="text" id="personalnumber" value="" required>
 
-    <label>Logo hochladen</label>
-    <input type="file" id="imageInput" accept="image/*">
+        <label>Logo hochladen</label>
+        <input type="file" id="imageInput" accept="image/*">
 
-    <div id="positionsContainer">
-        <div class="position" id="position0">
-            <label>Datum</label>
-            <input type="date" id="posdate0" required>
+        <div id="positionsContainer">
+            <div class="position" id="position0">
+                <label>Datum</label>
+                <input type="date" id="posdate0" required>
 
-            <label>Beginn</label>
-            <input type="text" id="start0" value="">
+                <label>Beginn</label>
+                <input type="text" id="start0" value="" required>
 
-            <label>Ende</label>
-            <input type="text" id="end0" value="">
+                <label>Ende</label>
+                <input type="text" id="end0" value="" required>
 
-            <label>Pause</label>
-            <input type="text" id="pause0" value="">
+                <label>Pause</label>
+                <input type="text" id="pause0" value="" required>
 
-            <label>Auftrag/Objekt</label>
-            <input type="text" id="obj0" value="">
+                <label>Auftrag/Objekt</label>
+                <input type="text" id="obj0" value="" required>
 
-            <label>Zeit</label>
-            <input type="text" id="time0" value="">
+                <label>Zeit</label>
+                <input type="text" id="time0" value="" required>
+            </div>
         </div>
-    </div>
-    
-    
-    <button type="button" onclick="addPosition()">Position hinzufügen</button>
+        
+        
+        <button type="button" onclick="addPosition()">Position hinzufügen</button>
 
-    <button type="submit" onclick="generatePDF()">Stundenzettel erstellen</button>
+        <button type="submit" onclick="generatePDF()">Stundenzettel erstellen</button>
+    </form>
     <script>
         let positionIndex = 1;
         function addPosition()
@@ -139,19 +141,19 @@
                 <input type="date" id="posdate${positionIndex}" required>
 
                 <label>Beginn</label>
-                <input type="text" id="start${positionIndex}" value="">
+                <input type="text" id="start${positionIndex}" value="" required>
 
                 <label>Ende</label>
-                <input type="text" id="end${positionIndex}" value="">
+                <input type="text" id="end${positionIndex}" value="" required>
 
                 <label>Pause</label>
-                <input type="text" id="pause${positionIndex}" value="">
+                <input type="text" id="pause${positionIndex}" value="" required>
 
                 <label>Auftrag/Objekt</label>
-                <input type="text" id="obj${positionIndex}" value="">
+                <input type="text" id="obj${positionIndex}" value="" required>
 
                 <label>Zeit</label>
-                <input type="text" id="time${positionIndex}" value="">
+                <input type="text" id="time${positionIndex}" value="" required>
             </div>`;
             container.insertAdjacentHTML('beforeend', positionHTML);
             positionIndex++;
