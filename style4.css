@@ -115,9 +115,10 @@ header ul li a:hover
     color: #fff;
     letter-spacing: 2px;
 }
+
 .sci
 {
-    position: absolute;
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
