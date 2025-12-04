@@ -195,8 +195,105 @@
             </div>
             <button type="button" onclick="addPosition()">Position hinzufügen</button>
             <button type="submit">XRechnung erstellen</button>
+            <a href="Excel Vorlage.xlsx" download="Excel Vorlage.xlsx" style="text-decoration: none; color: white">
+                <button type="button">Excel Vorlage herunterladen</button>
+            </a>
+            <p>CSV Datei importieren:</p>
+            <input type="file" id="csvUpload" accept=".csv" />
         </form>
     <script>
+
+        document.getElementById("csvUpload").addEventListener("change", function (event)
+        {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e)
+            {
+                const text = e.target.result;
+                const rows = text.split("\n").map(r => r.trim());
+
+                const customerRow = rows[2].split(";");
+                let invoiceTypeValue = "";
+                switch (customerRow[0].trim())
+                {
+                    case "Rechnung (Standardrechnung)":
+                        invoiceTypeValue = "380";
+                        break;
+
+                    case "Gutschrift":
+                        invoiceTypeValue = "381";
+                        break;
+
+                    case "Korrekturrechnung":
+                        invoiceTypeValue = "384";
+                        break;
+
+                    case "Teilrechnung":
+                        invoiceTypeValue = "326";
+                        break;
+
+                    case "Eigenrechnung":
+                        invoiceTypeValue = "389";
+                        break;
+
+                    case "Baurechnung":
+                        invoiceTypeValue = "377";
+                        break;
+
+                    default:
+                        window.alert("Unbekannte Rechnungsart: " + customerRow[0]);
+                }
+
+                function convertDate(dateStr)
+                {
+                    if(!dateStr)
+                    {
+                        return "";
+                    }
+                    const [d, m, y] = dateStr.split(".");
+                    return `${y}-${m}-${d}`;
+                }
+
+                document.getElementById("invoice_Type").value = invoiceTypeValue;
+                document.querySelector('input[name="invoiceNumber"]').value = customerRow[1];
+                document.querySelector('input[name="invoiceDate"]').value = convertDate(customerRow[2]);
+                document.querySelector('input[name="deliveryDate"]').value = convertDate(customerRow[3]);
+
+                document.querySelector('input[name="buyerName"]').value = customerRow[4];
+                document.querySelector('input[name="buyerReference"]').value = customerRow[5];
+                document.querySelector('input[name="buyerStreet"]').value = customerRow[6];
+                document.querySelector('input[name="buyerZip"]').value = customerRow[7];
+                document.querySelector('input[name="buyerCity"]').value = customerRow[8];
+                document.querySelector('input[name="buyerCountry"]').value = customerRow[9];
+                document.querySelector('input[name="buyerVat"]').value = customerRow[10];
+
+                const companyHeaderIndex = rows.findIndex(r => r.startsWith("Firmendaten"));
+                const companyDataRow = rows[companyHeaderIndex + 2].split(";");
+
+                document.querySelector('input[name="sellerName"]').value = companyDataRow[0];
+                document.querySelector('input[name="sellerStreet"]').value = companyDataRow[1];
+                document.querySelector('input[name="sellerZip"]').value = companyDataRow[2];
+                document.querySelector('input[name="sellerCity"]').value = companyDataRow[3];
+                document.querySelector('input[name="sellerCountry"]').value = companyDataRow[4];
+                document.querySelector('input[name="sellerVat"]').value = companyDataRow[5];
+
+                document.getElementById("Allowance_id").value = companyDataRow[6];
+                document.querySelector('input[name="currency"]').value = companyDataRow[7];
+                document.getElementById("Prepaid_id").value = companyDataRow[8];
+                document.querySelector('input[name="payCondition"]').value = companyDataRow[9];
+
+                console.log("CSV erfolgreich eingelesen.");
+            };
+
+            reader.readAsText(file, "UTF-8");
+        });
+
+
+
+
         let positionIndex = 1;
         let total_Net = 0;
         let totalVatAmount = 0;
@@ -466,7 +563,6 @@
       </div>
 </body>
 </html>
-
 
 
 
