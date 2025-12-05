@@ -94,7 +94,7 @@
     <label>Name & Anschrift des Empfängers</label>
     <textarea id="buyer" required></textarea>
 
-    <label>Steuernummer oder USt-IdNr.</label>
+    <label>Ihre Steuernummer oder USt-IdNr.</label>
     <input type="text" id="taxId" required>
 
     <label>Ausstellungsdatum</label>
@@ -151,7 +151,92 @@
     <button type="button" onclick="addPosition()">Position hinzufügen</button>
 
     <button type="submit" onclick="generatePDF()">PDF-Rechnung erstellen</button>
+
+    <a href="Vorlage PDF Rechnung.xlsx" download="Vorlage PDF Rechnung.xlsx" style="text-decoration: none; color: white">
+                <button type="button">Excel Vorlage herunterladen</button>
+            </a>
+
+
+    <p>CSV Datei importieren:</p>
+    <input type="file" id="csvUpload" accept=".csv" />
+
+
     <script>
+        document.getElementById("csvUpload").addEventListener("change", function (event)
+        {
+            const file = event.target.files[0];
+            if(!file)
+            {
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e)
+            {
+                const text = e.target.result;
+
+                // CSV in Zeilen splitten
+                const rows = text.split("\n").map(r => r.trim());
+                if(rows.length < 2)
+                {
+                    alert("Die CSV enthält keine zweite Zeile mit Daten!");
+                    return;
+                }
+
+                // 2. Zeile auslesen
+                const values = rows[1].split(";");
+
+                // Liste der Formularfelder in derselben Reihenfolge wie die CSV
+                const fieldIds = [
+                    "inv_num",
+                    "seller",
+                    "buyer",
+                    "taxId",
+                    "date",
+                    "deliveryDate",
+                    "documentType",
+                    "conditions",
+                    "notes",
+                    "payment",
+                    "greeding"
+                ];
+
+                // Felder automatisch befüllen
+                fieldIds.forEach((id, i) => {
+                    const element = document.getElementById(id);
+                   if (element && values[i] !== undefined)
+                   {
+                        let v = values[i].trim();
+
+                        // Prüfen: Ist der Wert ein Datum im Format DD.MM.YYYY?
+                        const dateRegex = /^(\d{2})\.(\d{2})\.(\d{4})$/;
+
+                        if (dateRegex.test(v))
+                        {
+                            // Zerlegen in Tag, Monat, Jahr
+                            const [, dd, mm, yyyy] = v.match(dateRegex);
+
+                            // In HTML-kompatibles Format YYYY-MM-DD umwandeln
+                            element.value = `${yyyy}-${mm}-${dd}`;
+                        } else
+                        {
+                            // Normal setzen, wenn kein Datum
+                            element.value = v;
+                        }
+                    }
+                });
+
+                console.log("CSV-Daten erfolgreich importiert!");
+            };
+
+            reader.readAsText(file, "UTF-8");
+    });
+
+
+
+
+
         let positionIndex = 1;
         function addPosition()
         {
