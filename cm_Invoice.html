@@ -157,6 +157,10 @@
             <label>Währung <input name="currency" required value="EUR"></label>
             <label>Vorauszahlungen <input name="Prepaid" id="Prepaid_id" value="0"></label>
             <label>Zahlungsbedingungen <input name="payCondition" value="keine"></label>
+            <label>Zahlungsempfänger<input name="payeeName" placeholder="Name des Zahlungsempfängers"></label>
+            <label>IBAN<input name="iban" placeholder="DE00 0000 0000 0000 0000 00"></label>
+            <label>BIC<input name="bic" placeholder="GENODEF1XXX"></label>
+
             <div id="positionsContainer">
                 <div class="position" id="p0">
                     <label>Name der Ware/Leistung <input type="text" name="itemName" id="item0" required></label>
@@ -397,6 +401,7 @@
                 catcode[i] = nstr;
             }
             const data = Object.fromEntries(new FormData(e.target));
+
             for(let i = 0; i < positionIndex; i++)
             {
                 total_Net = ((elem_quantity[i] * elem_price[i]) + total_Net);
@@ -526,6 +531,26 @@
                     <udt:DateTimeString format='102'>${data.invoiceDate.replace(/-/g, '')}</udt:DateTimeString>
                 </ram:DueDateDateTime>
             </ram:SpecifiedTradePaymentTerms>
+
+            <ram:SpecifiedTradeSettlementPaymentMeans>
+                <ram:TypeCode>58</ram:TypeCode> <!-- SEPA Überweisung -->
+
+                <ram:PayeePartyCreditorFinancialAccount>
+                    <ram:IBANID>${data.iban}</ram:IBANID>
+                </ram:PayeePartyCreditorFinancialAccount>
+
+                ${data.bic ? `
+                <ram:PayeeSpecifiedCreditorFinancialInstitution>
+                    <ram:BICID>${data.bic}</ram:BICID>
+                </ram:PayeeSpecifiedCreditorFinancialInstitution>
+                ` : ''}
+                
+                <ram:PayeeParty>
+                    <ram:Name>${data.payeeName}</ram:Name>
+                </ram:PayeeParty>
+            </ram:SpecifiedTradeSettlementPaymentMeans>
+
+
             <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
                 <ram:LineTotalAmount>${totalAmount}</ram:LineTotalAmount>
                 <ram:AllowanceTotalAmount>${Allow_Amount}</ram:AllowanceTotalAmount>
