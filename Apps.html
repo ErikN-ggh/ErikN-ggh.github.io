@@ -6,6 +6,106 @@
     <title>Apps</title>
     <link rel="icon" type="image/x-icon" href="simplified_Logo.png">
     <link rel="stylesheet" type="text/css" href="style4.css">
+
+<style>
+    .app-list
+    {
+        list-style: none;
+        padding: 0;
+        margin: 25px auto;
+        width: 50vw;
+        max-width: 780px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .app-button {
+        display: block;
+        padding: 48px 18px;
+        border-radius: 18px;
+        text-align: center;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid rgba(0,0,0,0.08);
+        background: linear-gradient(145deg, #ffffff, #f3f5f9);
+        box-shadow:
+        0 6px 14px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+        transition: transform .18s ease, box-shadow .18s ease, background .2s ease;
+    }
+
+    .app-button:hover
+    {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 22px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+        color: #0f172a;
+    }
+
+    .blue
+    {
+        background: linear-gradient(145deg, #0e95d4, #0284c7);
+        color: #fff;
+    }
+
+    .yellow
+    {
+        background: linear-gradient(145deg, #fcde49, #eab308);
+        color: #111;
+    }
+
+    .orange
+    {
+        background: linear-gradient(145deg, #ec8938, #f97316);
+        color: #fff;
+    }
+
+    .green
+    {
+        background: linear-gradient(145deg, #1cb956, #16a34a);
+        color: #fff;
+    }
+
+    .purple
+    {
+        background: linear-gradient(145deg, #9446dd, #7c3aed);
+        color: #fff;
+    }
+
+    .indigo
+    {
+        background: linear-gradient(145deg, #5355df, #4f46e5);
+        color: #fff;
+    }
+
+
+    .app-button:hover.blue,
+    .app-button:hover.yellow,
+    .app-button:hover.orange,
+    .app-button:hover.green,
+    .app-button:hover.purple,
+    .app-button:hover.indigo
+    {
+        filter: brightness(1.06);
+        color: #fff;
+    }
+
+    @media (max-width: 620px)
+    {
+        .app-list
+        {
+            width: 100vw;
+            max-width: none;
+            grid-template-columns: 1fr;
+        }
+
+        .app-button
+        {
+            padding: 40px 16px;
+        }
+    }
+</style>
+
 </head>
 <body>
     <div class="box content">
@@ -18,14 +118,15 @@
           <div class="contentBox">
             <h2>Programme</h2>
             <p class="paragraph">Unsere eigenen Programme
-                <ul class="list">
-                    <li><a href="planner.html">Einnahmen-Ausgaben Planer</a></li>
-                    <li><a href="cm_Bookplanner.html">Professionelle Buchhaltung</a></li>
-                    <li><a href="cm_Organizer.html">Aufgaben-Organizer</a></li>
-                    <li><a href="cm_Invoice.html">X-Rechnung erstellen (für B2B-Umsätze)</a></li>
-                    <li><a href="PDF_ind.html">PDF-Dokumente erstellen</a></li>
-                    <li><a href="Download.html">PDF-Dokumente herunterladen</a></li>
+                <ul class="app-list">
+                    <li><a class="app-button blue" href="planner.html">Einnahmen-Ausgaben Planer</a></li>
+                    <li><a class="app-button yellow" href="cm_Bookplanner.html">Professionelle Buchhaltung</a></li>
+                    <li><a class="app-button orange" href="cm_Organizer.html">Aufgaben-Organizer</a></li>
+                    <li><a class="app-button green" href="cm_Invoice.html">X-Rechnung erstellen (B2B)</a></li>
+                    <li><a class="app-button purple" href="PDF_ind.html">PDF-Dokumente erstellen</a></li>
+                    <li><a class="app-button indigo" href="Download.html">PDF-Dokumente herunterladen</a></li>
                 </ul>
+
               <a href="Datenschutz.html">Datenschutz</a>
             </p>
           </div>
