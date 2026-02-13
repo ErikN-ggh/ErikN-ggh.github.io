@@ -77,6 +77,14 @@ header ul li a:hover
     font-size: 4em;
     color: #333;
 }
+
+.content h3
+{
+    margin-top: 20px;
+    font-size: 2em;
+    color: #333;
+}
+
 .content p
 {
     font-size: 1.1em;
