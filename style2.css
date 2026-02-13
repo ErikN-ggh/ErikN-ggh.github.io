@@ -51,8 +51,8 @@ header {
     text-decoration: none;
 }
 
-.logo p {
-    margin-left: 10px;
+.logo h3 {
+    margin-left: 20px;
     color: #111;
 }
 
@@ -214,3 +214,4 @@ header ul li a:hover {
         bottom: 15px;
     }
 }
+
