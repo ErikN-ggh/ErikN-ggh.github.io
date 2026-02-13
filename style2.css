@@ -51,7 +51,7 @@ header {
     text-decoration: none;
 }
 
-.logo h1 {
+h1 {
     margin-left: 20px;
     font-size: 1em;
     color: #777;
@@ -215,6 +215,7 @@ header ul li a:hover {
         bottom: 15px;
     }
 }
+
 
 
 
