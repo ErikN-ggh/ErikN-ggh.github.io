@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDS-News</title>
+
+    <link rel="icon" type="image/x-icon" href="simplified_Logo.png">
+    <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body
+        {
+            background-color: #fff;
+            height: 100%;
+        }
+
+        header
+        {
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo
+        {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .logo img
+        {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo p
+        {
+            margin-left: 10px;
+            font-size: 1.2em;
+            color: #777;
+        }
+
+        header ul
+        {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        header ul li a
+        {
+            text-decoration: none;
+            font-weight: 700;
+            color: #bdbdbd;
+        }
+
+        header ul li a:hover
+        {
+            color: #333;
+        }
+        
+        .content
+        {
+            padding-top: 4%;
+            padding-bottom: 4%;
+            padding-left: 5%;
+        }
+
+        .date
+        {
+            color: #888;
+            font-size: 1em;
+            font-family: Arial, Helvetica, sans-serif;
+            padding-bottom: 1%;
+        }
+
+        .headline
+        {
+            font-size: 5em;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111;
+            padding-bottom: 1%;
+        }
+        .article
+        {
+            font-size: 1.2em;
+            color: #777;
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 80%;
+            padding-bottom: 4%;
+        }
+
+        .src
+        {
+            color: #333;
+            font-size: 2em;
+            padding-bottom: 1%;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .link
+        {
+            font-size: 1em;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #777;
+            text-decoration: underline;
+        }
+
+        @media(max-width: 768px)
+        {
+            header
+            {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .logo p
+            {
+                font-size: 1em;
+            }
+
+            .headline
+            {
+                font-size: 2.5em;
+                font-family: Arial, Helvetica, sans-serif;
+                color: #111;
+                padding-bottom: 1%;
+                padding-top: 1%;
+            }
+
+            .article
+            {
+                font-size: 1.1em;
+                color: #777;
+                font-family: Arial, Helvetica, sans-serif;
+                max-width: 80%;
+                padding-bottom: 8%;
+                padding-top: 2%;
+            }
+            .content
+            {
+                padding-top: 4%;
+                padding-bottom: 8%;
+                padding-left: 8%;
+            }
+
+
+            header ul
+            {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">
+            <img src="simplified_Logo.png" alt="Logo">
+            <p>Nürnberger Digital Services</p>
+        </a>
+        <ul>
+            <li><a href="index2.html">Zurück</a></li>
+        </ul>
+    </header>
+    <div class="content">
+        <p class="date">24.02.2026</p>
+        <h1 class="headline">146 Milliarden Euro für Stillstand</h1>
+        <p class="article">Die deutsche Bürokratie verursacht jährliche Kosten von bis zu 146 Milliarden Euro für die Wirtschaft,
+            während das Land gleichzeitig zu den Spitzenreitern im Papierverbrauch zählt [ifo.de, statista.com].
+            NDS positioniert sich als Softwareunternehmen, das diesen Papierwahn und Verwaltungsaufwand aktiv bekämpft,
+            um digitale Effizienz statt manueller Hürden zu schaffen.
+        </p>
+        <h2 class="src">Quellen:</h2>
+        <a class="link" href="https://www.ifo.de/pressemitteilung/2024-11-14/buerokratie-deutschland-kostet-jaehrlich-146-milliarden-euro">ifo Institut</a> <br>
+        <a class="link" href="https://www.statista.com/statistics/962605/largest-per-capita-paper-consuming-countries-worldwide/?srsltid=AfmBOoq_C-C-E_vP5mYQQgObY0GbMhDR6KXeqF6ZeB-aR3Bv9gbrM9pI#:~:text=Published%20by,consumed%20per%20person%20per%20year.">statista</a>
+    </div>
+
+</body>
+</html>
