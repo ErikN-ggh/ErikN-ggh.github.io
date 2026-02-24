@@ -63,7 +63,7 @@ h1 {
 }
 
 header ul {
-    display: flex;
+    padding-left: 1%;
     gap: 20px;
 }
 
@@ -224,6 +224,7 @@ header ul li a:hover {
         gap: 20px;
     }
 }
+
 
 
 
