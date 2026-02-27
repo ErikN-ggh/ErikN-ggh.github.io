@@ -207,7 +207,7 @@ header ul li a:hover {
 
 @media (max-width: 600px) {
     .content h2 {
-        font-size: 2.2em;
+        font-size: 1.2em;
     }
 
     .images .imgBx {
@@ -225,6 +225,7 @@ header ul li a:hover {
         gap: 20px;
     }
 }
+
 
 
 
